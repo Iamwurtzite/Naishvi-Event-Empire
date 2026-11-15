@@ -23,16 +23,7 @@ Double-click `start-server.bat` (or run `node dev-server.js`):
 - **Customer Tracker**: http://localhost:3000/customer
 - **Vendor Desk**: http://localhost:3000/vendor
 
----
-
-## 🔐 Administrative Access Control (Two-Tier Authority)
-
-| Role | Password | Privileges |
-| :--- | :--- | :--- |
-| **Super Admin (Master)** | `Iamwurtzite@8445` | Full Master Authority: Edit Google Sheets Webhook URL, Add/Edit Notification Emails, Modify Admin Passwords, Manage Events & Pricing, Purge Mock Data. |
-| **Staff Authority** | `naishvi@123` | Operational Access: View and update Bookings, Quotations, Vendor assignments, Live Events & Gallery. **Google Sheets Webhook & Notification Emails are locked/read-only.** |
-
----
+--
 
 ## 📊 Google Sheets & Email Integration
 
