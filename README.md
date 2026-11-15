@@ -23,10 +23,8 @@ Double-click `start-server.bat` (or run `node dev-server.js`):
 - **Customer Tracker**: http://localhost:3000/customer
 - **Vendor Desk**: http://localhost:3000/vendor
 
----
 
 
----
 
 ## 📊 Google Sheets & Email Integration
 
