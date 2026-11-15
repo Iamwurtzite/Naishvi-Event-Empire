@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      var isGHPages = window.location.hostname.endsWith('github.io');
+      var repo = isGHPages ? '/' + window.location.pathname.split('/').filter(Boolean)[0] + '/' : '/';
+      document.write('<base href="' + repo + '">');
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music & Live Entertainment | NAISHVI EVENT EMPIRE</title>
+  <meta name="description" content="Book royal live music in Agra: Ghazal Night, Jagran & Bhajan Sandhya, Mata Ki Chowki, Rajasthani Folk Troupes, Acoustic Bands, and Celebrity Anchors.">
+
+  <!-- Google Fonts: Playfair Display + Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .music-cat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      padding: 26px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .music-cat-card:hover {
+      border-color: var(--primary-gold-light);
+      background: var(--bg-card-hover);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    }
+    .music-filter-btn {
+      padding: 8px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .music-filter-btn.active, .music-filter-btn:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: var(--primary-gold);
+      color: #fff;
+    }
+    .music-form-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 38px;
+      box-shadow: var(--shadow-luxury);
+    }
+  </style>
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div>
+        <span><i class="fa-solid fa-phone text-gold"></i> +91 8279622416</span>
+        <span style="margin-left: 20px;"><i class="fa-solid fa-location-dot text-gold"></i> Shahdra, Agra, Uttar Pradesh</span>
+      </div>
+      <div class="top-links">
+        <a href="customer"><i class="fa-solid fa-user-check"></i> Customer Dashboard</a>
+        <a href="order"><i class="fa-solid fa-calendar-check"></i> Book Online</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header-main">
+    <div class="container nav-container">
+      <a href="./" class="brand-logo">
+        <img src="assets/images/logo.jpg" alt="Naishvi Event Empire Logo" class="brand-logo-img">
+        <div class="brand-text-group">
+          <span class="brand-title">NAISHVI EVENT EMPIRE</span>
+          <span class="brand-subtitle">WEDDINGS • EVENTS • DESTINATIONS</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="./">Home</a></li>
+        <li><a href="about">About Us</a></li>
+        <li><a href="events">Events</a></li>
+        <li><a href="services">Services</a></li>
+        <li><a href="packages">Packages</a></li>
+        <li><a href="gallery">Gallery</a></li>
+        <li><a href="contact">Contact Us</a></li>
+
+        <!-- 3 Dots More Options Dropdown -->
+        <li class="nav-dropdown" id="navMoreDropdown">
+          <button type="button" class="nav-dots-btn" id="navDotsBtn" aria-label="More Options" title="More Options">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+          <ul class="nav-dropdown-menu" id="navDropdownMenu">
+            <li><a href="music" class="active"><i class="fa-solid fa-music"></i> Music & Live Entertainment</a></li>
+            <li><a href="pandit"><i class="fa-solid fa-om"></i> Pandit Ji & Pooja Services</a></li>
+            <li><a href="venues"><i class="fa-solid fa-landmark"></i> Agra Venues Finder</a></li>
+            <li><a href="calculator"><i class="fa-solid fa-calculator"></i> Wedding Budget Calculator</a></li>
+            <li><a href="customer"><i class="fa-solid fa-user-check"></i> Track Booking Dashboard</a></li>
+            <li><a href="customer-portal"><i class="fa-solid fa-file-invoice"></i> Client Quotation Desk</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="nav-cta-group">
+        <a href="order" class="btn btn-gold btn-sm">
+          <i class="fa-solid fa-calendar-check"></i> Book Event
+        </a>
+        <button class="mobile-toggle" id="mobileToggleBtn" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Subpage Hero -->
+  <section class="subpage-hero">
+    <div class="subpage-hero-overlay"></div>
+    <div class="container">
+      <div class="subpage-hero-content">
+        <span class="hero-badge"><i class="fa-solid fa-guitar"></i> Royal Wedding Beats & Melodies</span>
+        <h1 class="subpage-title">Music & Live Entertainment</h1>
+        <p class="subpage-desc">
+          Soulful Mehfil-e-Ghazals, sacred Jagran & Bhajan Sandhya, Mata Ki Chowki, authentic Rajasthani folk artists, acoustic Bollywood bands, and celebrity anchors across Agra.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Music Categories Filter & Catalog -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">All Live Music Troupes</span>
+        <h2 class="section-title">Curated Performances For Every Ceremony</h2>
+        <p class="section-desc">
+          Select from our handpicked devotional singer mandalis, classical ensembles, high-energy wedding bands, and celebrity hosts:
+        </p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 36px;">
+        <button type="button" class="music-filter-btn active" onclick="filterMusicList('all', this)">All Performances</button>
+        <button type="button" class="music-filter-btn" onclick="filterMusicList('Devotional & Sacred', this)"><i class="fa-solid fa-hands-praying"></i> Devotional & Sacred</button>
+        <button type="button" class="music-filter-btn" onclick="filterMusicList('Mehfil & Sufi', this)"><i class="fa-solid fa-microphone-lines"></i> Mehfil & Sufi</button>
+        <button type="button" class="music-filter-btn" onclick="filterMusicList('Folk & Cultural', this)"><i class="fa-solid fa-sun"></i> Folk & Cultural</button>
+        <button type="button" class="music-filter-btn" onclick="filterMusicList('Live Bands & Classical', this)"><i class="fa-solid fa-guitar"></i> Live Bands & Classical</button>
+        <button type="button" class="music-filter-btn" onclick="filterMusicList('Dancers & Anchors', this)"><i class="fa-solid fa-people-group"></i> Dancers & Anchors</button>
+      </div>
+
+      <!-- Music Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-bottom: 70px;" id="musicCatalogGrid">
+        <!-- Injected via JavaScript from store.js -->
+      </div>
+
+      <!-- Dedicated Music Booking Form -->
+      <div class="music-form-card" id="musicBookingFormSection">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <span class="section-tag"><i class="fa-solid fa-music"></i> Dedicated Artist Reservation</span>
+          <h2 style="font-size: 2.2rem; color: #fff;">Book Live Music & Entertainment in Agra</h2>
+          <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 680px; margin: 0 auto;">
+            Complete turnkey management including certified vocalists, authentic musical instruments, concert audio sound engineering, and on-site event coordinator.
+          </p>
+        </div>
+
+        <form id="musicBookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Select Performance / Music Type *</label>
+              <select id="musicSelect" class="form-control" required>
+                <!-- Populated via script -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Performance Date & Time *</label>
+              <input type="datetime-local" id="musicDateTime" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Client Full Name *</label>
+              <input type="text" id="musicCustName" class="form-control" placeholder="Host / Event Planner Name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp Contact Number *</label>
+              <input type="tel" id="musicCustPhone" class="form-control" placeholder="10-digit mobile number" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Venue / Address in Agra *</label>
+              <input type="text" id="musicLocation" class="form-control" placeholder="e.g. Shahdra, Fatehabad Road, Hotel Banquet, Agra" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Performance Duration *</label>
+              <select id="musicDuration" class="form-control">
+                <option value="2 - 3 Hours Performance" selected>2 - 3 Hours Performance (Standard)</option>
+                <option value="3 - 4 Hours Extended Mehfil">3 - 4 Hours Extended Mehfil</option>
+                <option value="All-Night Jagran / Kirtan (8+ Hours)">All-Night Jagran / Kirtan (8+ Hours)</option>
+                <option value="Full Wedding Day Multi-Session">Full Wedding Day Multi-Session</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Sound & Stage AV Setup Requirement *</label>
+              <select id="musicSoundSetup" class="form-control">
+                <option value="Turnkey Concert Sound Included by Naishvi (JBL/RCF Line Array)" selected>Turnkey Concert Sound Included by Naishvi (JBL/RCF Line Array + Mics)</option>
+                <option value="Sound Excluded (Venue / Client provides sound system)">Sound Excluded (Venue / Client provides sound system)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Artist / Troupe Scale</label>
+              <select id="musicTroupeSize" class="form-control">
+                <option value="4-5 Member Core Troupe (Vocalist + Instruments)" selected>4-5 Member Core Troupe (Vocalist + Instruments)</option>
+                <option value="8-10 Member Royal Ensemble (Full Orchestra)">8-10 Member Royal Ensemble (Full Orchestra)</option>
+                <option value="15+ Grand Symphony / Cultural Troupe">15+ Grand Symphony / Cultural Troupe</option>
+                <option value="Solo Lead Artist / Celebrity Anchor">Solo Lead Artist / Celebrity Anchor</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Special Song Requests / Ceremony Theme Notes</label>
+            <input type="text" id="musicNotes" class="form-control" placeholder="e.g. Specific bhajans for Jagran, Sufi tracks for cocktail, Punjabi folk for baraat">
+          </div>
+
+          <button type="submit" class="btn btn-gold btn-lg" style="width: 100%; font-size: 1.15rem; margin-top: 10px;">
+            <i class="fa-solid fa-guitar"></i> Confirm Live Entertainment Booking & Request Quote
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-main">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 16px;">
+            <img src="assets/images/logo.jpg" alt="Naishvi Event Empire Logo" class="brand-logo-img">
+            <div class="brand-text-group">
+              <span class="brand-title">NAISHVI EVENT EMPIRE</span>
+              <span class="brand-subtitle">WEDDINGS • EVENTS • DESTINATIONS</span>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">
+            India’s premier wedding architects turning your celebrations into musical and unforgettable memories.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Live Music</h4>
+          <ul class="footer-links">
+            <li><a href="music">Ghazal & Sufi Mehfil</a></li>
+            <li><a href="music">Jagran & Bhajan Sandhya</a></li>
+            <li><a href="music">Mata Ki Chowki</a></li>
+            <li><a href="music">Rajasthani Folk Troupe</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Client Access</h4>
+          <ul class="footer-links">
+            <li><a href="order">Book Event</a></li>
+            <li><a href="customer">Customer Dashboard</a></li>
+            <li><a href="pandit">Pandit Ji & Pooja</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Agra Office</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">
+            <i class="fa-solid fa-location-dot text-gold"></i> Shahdra, Agra, UP
+          </p>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">
+            <i class="fa-solid fa-phone text-gold"></i> +91 8279622416
+          </p>
+        </div>
+      </div>
+      <div class="copyright-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="assets/images/logo.jpg" alt="Naishvi Event Empire" style="width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--primary-gold); object-fit: cover;">
+          <span>© 2026 NAISHVI EVENT EMPIRE. All Rights Reserved.</span>
+        </div>
+        <div>
+          <span>Crafted with Royal Elegance for Indian Weddings.</span> • <span>Developed by <a href="mailto:iamwurtzite@gmail.com?subject=Website%20Inquiry%20-%20Naishvi%20Event%20Empire" style="color: var(--primary-gold); font-weight: 700; text-decoration: underline;" title="Send mail to Developer Iamwurtzite">Iamwurtzite</a></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://api.whatsapp.com/send?phone=918279622416" target="_blank" class="whatsapp-floating" aria-label="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script src="assets/js/store.js"></script>
+  <script>
+    let activeMusicList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('musicCatalogGrid');
+      const select = document.getElementById('musicSelect');
+      if (!window.ncStore) return;
+
+      activeMusicList = window.ncStore.getMusicServices();
+
+      // Populate Select Dropdown
+      if (select) {
+        select.innerHTML = '<option value="">-- Choose Performance / Music Style --</option>' +
+          activeMusicList.map(m => `<option value="${m.name}">${m.name} (Starting ₹${Number(m.price).toLocaleString('en-IN')})</option>`).join('');
+      }
+
+      renderMusicGrid('all');
+
+      // Check URL query param (e.g. ?service=...)
+      const params = new URLSearchParams(window.location.search);
+      const querySrv = params.get('service');
+      if (querySrv) {
+        selectMusicForBooking(querySrv);
+      }
+
+      // Handle Booking Form Submit
+      const form = document.getElementById('musicBookingForm');
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const musicName = document.getElementById('musicSelect').value;
+        const dateTime = document.getElementById('musicDateTime').value;
+        const custName = document.getElementById('musicCustName').value.trim();
+        const custPhone = document.getElementById('musicCustPhone').value.trim();
+        const location = document.getElementById('musicLocation').value.trim();
+        const duration = document.getElementById('musicDuration').value;
+        const sound = document.getElementById('musicSoundSetup').value;
+        const troupe = document.getElementById('musicTroupeSize').value;
+        const notes = document.getElementById('musicNotes').value.trim();
+
+        const fullNotes = `[Music Booking: ${musicName}] Duration: ${duration} | Sound Setup: ${sound} | Troupe: ${troupe}${notes ? ' | Notes: ' + notes : ''}`;
+
+        const bookingPayload = {
+          customerName: custName,
+          mobile: custPhone,
+          eventDate: dateTime.split('T')[0] || new Date().toISOString().split('T')[0],
+          events: [musicName],
+          location: location,
+          packageId: 'live-music',
+          packageName: 'Live Music & Entertainment: ' + musicName,
+          budget: '₹25,000 - ₹60,000',
+          services: ['Music & Live Entertainment: ' + musicName],
+          specialNotes: fullNotes
+        };
+
+        const result = window.ncStore.createBooking(bookingPayload);
+
+        if (result.error) {
+          alert(result.message || 'A booking has already been submitted today with this mobile number.');
+          return;
+        }
+
+        alert(`Thank you ${custName}! Your Live Entertainment reservation for "${musicName}" on ${dateTime.replace('T', ' at ')} has been registered.\n\nBooking Ref ID: ${result.id}\n\nOur artist coordinator will call you on WhatsApp within 30 minutes to confirm performance lineup and acoustic setup.`);
+        form.reset();
+      });
+    });
+
+    function renderMusicGrid(filterCat = 'all') {
+      const grid = document.getElementById('musicCatalogGrid');
+      if (!grid) return;
+
+      let list = activeMusicList;
+      if (filterCat !== 'all') {
+        list = list.filter(m => m.category === filterCat);
+      }
+
+      grid.innerHTML = list.map(m => `
+        <div class="music-cat-card">
+          ${m.popular ? '<span style="position: absolute; top: 14px; right: 14px; background: rgba(212,175,55,0.2); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 2px 10px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;"><i class="fa-solid fa-crown text-gold"></i> Most Popular</span>' : ''}
+          <div>
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(212,175,55,0.12); border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); font-size: 1.4rem; margin-bottom: 14px;">
+              <i class="fa-solid ${m.icon}"></i>
+            </div>
+            <span style="font-size: 0.72rem; background: rgba(212,175,55,0.15); border: 1px solid var(--border-gold); color: var(--primary-gold-light); padding: 3px 10px; border-radius: var(--radius-full); display: inline-block; margin-bottom: 8px;">${m.category}</span>
+            <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 6px;">${m.name}</h3>
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; font-size: 0.8rem; color: #eeddb0;">
+              <span><i class="fa-solid fa-clock text-gold"></i> ${m.duration}</span>
+              <span>•</span>
+              <span style="color: var(--primary-gold); font-weight: 700;">Starting ₹${Number(m.price).toLocaleString('en-IN')}</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
+              ${m.desc}
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-gold btn-sm" onclick="selectMusicForBooking('${m.name}')" style="flex: 1; text-align: center;">
+              <i class="fa-solid fa-calendar-check"></i> Book Performance
+            </button>
+            <a href="https://api.whatsapp.com/send?phone=918279622416&text=${encodeURIComponent('Namaste Naishvi Event Empire! I want to inquire about booking ' + m.name + ' in Agra.')}" target="_blank" class="btn btn-outline-gold btn-sm" style="padding: 6px 12px;" title="WhatsApp Inquiry">
+              <i class="fa-brands fa-whatsapp text-gold"></i>
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterMusicList(cat, btn) {
+      document.querySelectorAll('.music-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderMusicGrid(cat);
+    }
+
+    function selectMusicForBooking(name) {
+      const select = document.getElementById('musicSelect');
+      if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value.toLowerCase().includes(name.toLowerCase()) || name.toLowerCase().includes(select.options[i].value.toLowerCase())) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      const formSection = document.getElementById('musicBookingFormSection');
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
+</body>
+</html>

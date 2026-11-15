@@ -1,0 +1,20 @@
+{
+  "name": "naishvi-event-empire",
+  "version": "1.0.0",
+  "description": "NAISHVI EVENT EMPIRE — Luxury Indian Wedding Planning & Event Management Platform",
+  "main": "dev-server.js",
+  "scripts": {
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js"
+  },
+  "keywords": [
+    "wedding",
+    "planning",
+    "indian",
+    "celebrations",
+    "naishvi",
+    "event-empire"
+  ],
+  "author": "Iamwurtzite",
+  "license": "ISC"
+}

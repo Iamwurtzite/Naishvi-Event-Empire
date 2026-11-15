@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting — NAISHVI EVENT EMPIRE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function () {
+      var isGHPages = window.location.hostname.endsWith('github.io');
+      var path = window.location.pathname;
+      var segments = path.split('/').filter(Boolean);
+      var repo = isGHPages && segments.length > 0 ? '/' + segments[0] : '';
+      
+      // Get the relative path inside repo
+      var relativePath = isGHPages && segments.length > 0 
+        ? '/' + segments.slice(1).join('/')
+        : path;
+      
+      // Remove trailing slash for matching
+      var clean = relativePath.replace(/\/$/, '') || '/';
+      var queryAndHash = window.location.search + window.location.hash;
+
+      var routeMap = {
+        '/events': '/events/',
+        '/services': '/services/',
+        '/packages': '/packages/',
+        '/gallery': '/gallery/',
+        '/about': '/about/',
+        '/about-us': '/about/',
+        '/contact': '/contact/',
+        '/contact-us': '/contact/',
+        '/order': '/order/',
+        '/booking': '/order/',
+        '/customer': '/customer/',
+        '/customer-dashboard': '/customer/',
+        '/customer-portal': '/customer-portal/',
+        '/quotation': '/customer-portal/',
+        '/venues': '/venues/',
+        '/agra-venues': '/venues/',
+        '/music': '/music/',
+        '/music-services': '/music/',
+        '/pandit': '/pandit/',
+        '/pandit-services': '/pandit/',
+        '/calculator': '/calculator/',
+        '/budget-calculator': '/calculator/',
+        '/vendor': '/vendor/',
+        '/vendor-portal': '/vendor/',
+        '/admin': '/admin/'
+      };
+
+      var target = routeMap[clean] || (clean === '/' ? '/' : clean + '/');
+      window.location.replace(repo + target + queryAndHash);
+    })();
+  </script>
+</head>
+<body style="background: #0b0c10; color: #eeddb0; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <div style="text-align: center;">
+    <h2 style="color: #d4af37; margin-bottom: 8px;">NAISHVI EVENT EMPIRE</h2>
+    <p style="color: #9ca3af; font-size: 0.9rem;">Connecting to celebration portal...</p>
+  </div>
+</body>
+</html>
