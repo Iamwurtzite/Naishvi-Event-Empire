@@ -3,9 +3,12 @@
 <head>
   <script>
     (function () {
+      if (window.location.protocol === 'file:') return;
       var isGHPages = window.location.hostname.endsWith('github.io');
-      var repo = isGHPages ? '/' + window.location.pathname.split('/').filter(Boolean)[0] + '/' : '/';
-      document.write('<base href="' + repo + '">');
+      if (isGHPages) {
+        var repo = '/' + window.location.pathname.split('/').filter(Boolean)[0] + '/';
+        document.write('<base href="' + repo + '">');
+      }
     })();
   </script>
   <meta charset="UTF-8">
