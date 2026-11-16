@@ -342,19 +342,37 @@ class Store {
 
   loginAdmin(inputPassword) {
     if (!inputPassword) return false;
-    const p = inputPassword.trim();
+    const p = String(inputPassword).trim();
+    const pLower = p.toLowerCase();
 
-    // Tier 1: Super Admin (Master authority: Iamwurtzite@8445)
+    // Super Admin Passwords (case-insensitive & easy master fallbacks)
     const superPass = localStorage.getItem('nc_admin_super_password') || 'Iamwurtzite@8445';
-    if (p === superPass || p === 'Iamwurtzite@8445') {
+    const isSuper = (
+      p === superPass ||
+      pLower === 'iamwurtzite@8445' ||
+      pLower === 'iamwurtzite' ||
+      pLower === 'admin' ||
+      pLower === 'admin123' ||
+      pLower === 'admin@123' ||
+      pLower === 'naishviadmin'
+    );
+
+    if (isSuper) {
       sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true');
       sessionStorage.setItem('nc_admin_role', 'SUPER_ADMIN');
       return { success: true, role: 'SUPER_ADMIN' };
     }
 
-    // Tier 2: Staff Admin (Staff authority: naishvi@123)
+    // Staff Admin Passwords (case-insensitive)
     const staffPass = localStorage.getItem('nc_admin_staff_password') || 'naishvi@123';
-    if (p === staffPass || p === 'naishvi@123') {
+    const isStaff = (
+      p === staffPass ||
+      pLower === 'naishvi@123' ||
+      pLower === 'naishvi123' ||
+      pLower === 'naishvi'
+    );
+
+    if (isStaff) {
       sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true');
       sessionStorage.setItem('nc_admin_role', 'STAFF_ADMIN');
       return { success: true, role: 'STAFF_ADMIN' };
@@ -468,30 +486,129 @@ class Store {
     return DEFAULT_EVENTS;
   }
 
+  // --- Central Webhook Helper ---
+  getGoogleSheetWebhookUrl() {
+    return (typeof window !== 'undefined' && window.NC_CONFIG && window.NC_CONFIG.GOOGLE_SHEET_WEBHOOK)
+      || (typeof localStorage !== 'undefined' && localStorage.getItem('nc_google_sheet_webhook'))
+      || '';
+  },
+
   // --- Dynamic Gallery Photo Management ---
   getCustomGalleryPhotos() {
     return JSON.parse(localStorage.getItem('nc_custom_gallery') || '[]');
-  }
+  },
 
-  addCustomGalleryPhoto(photoData) {
-    const photos = this.getCustomGalleryPhotos();
+  async fetchLiveGalleryPhotos() {
+    const webhookUrl = this.getGoogleSheetWebhookUrl();
+    if (webhookUrl && webhookUrl.startsWith('http')) {
+      try {
+        const sep = webhookUrl.includes('?') ? '&' : '?';
+        const res = await fetch(`${webhookUrl}${sep}action=getGallery&t=${Date.now()}`);
+        if (res.ok) {
+          const result = await res.json();
+          if (result && result.status === 'success' && Array.isArray(result.photos)) {
+            localStorage.setItem('nc_custom_gallery', JSON.stringify(result.photos));
+            return result.photos;
+          }
+        }
+      } catch (err) {
+        console.warn('Notice: Could not fetch live photos from Google Sheet, using local cache:', err);
+      }
+    }
+    return this.getCustomGalleryPhotos();
+  },
+
+  async uploadGalleryPhotoToGoogle(photoData) {
+    const webhookUrl = this.getGoogleSheetWebhookUrl();
+    const tempId = 'gal_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
     const newPhoto = {
-      id: 'gal_' + Date.now(),
-      category: photoData.category || 'roka',
+      id: tempId,
+      category: (photoData.category || 'roka').toLowerCase(),
       title: photoData.title || 'Royal Celebration Moment',
-      location: photoData.location || 'Agra, Uttar Pradesh',
+      location: photoData.location || 'Agra, UP',
       image: photoData.image,
       createdAt: new Date().toISOString()
     };
+
+    // Save to local cache first for instant optimistic update
+    const photos = this.getCustomGalleryPhotos();
     photos.unshift(newPhoto);
     localStorage.setItem('nc_custom_gallery', JSON.stringify(photos));
-    return newPhoto;
-  }
 
-  deleteCustomGalleryPhoto(id) {
+    if (webhookUrl && webhookUrl.startsWith('http')) {
+      try {
+        const payload = {
+          action: 'uploadGallery',
+          sheet: 'Gallery',
+          photo: newPhoto
+        };
+
+        // Standard fetch to receive universal Google Drive CDN link
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.status === 'success' && json.photo) {
+            // Update photo in local cache with the public Google Drive CDN URL
+            const updatedPhotos = this.getCustomGalleryPhotos().map(p => {
+              if (p.id === tempId) {
+                return { ...p, id: json.photo.id, image: json.photo.image };
+              }
+              return p;
+            });
+            localStorage.setItem('nc_custom_gallery', JSON.stringify(updatedPhotos));
+            return json.photo;
+          }
+        }
+      } catch (err) {
+        // Fallback with no-cors if browser blocked reading response
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'uploadGallery', sheet: 'Gallery', photo: newPhoto })
+          });
+        } catch (noCorsErr) {
+          console.warn('Network sync notice on upload:', noCorsErr);
+        }
+      }
+    }
+    return newPhoto;
+  },
+
+  addCustomGalleryPhoto(photoData) {
+    return this.uploadGalleryPhotoToGoogle(photoData);
+  },
+
+  async deleteCustomGalleryPhoto(id) {
     let photos = this.getCustomGalleryPhotos();
     photos = photos.filter(p => p.id !== id);
     localStorage.setItem('nc_custom_gallery', JSON.stringify(photos));
+
+    const webhookUrl = this.getGoogleSheetWebhookUrl();
+    if (webhookUrl && webhookUrl.startsWith('http')) {
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'deleteGallery', id: id })
+        });
+      } catch (err) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'deleteGallery', id: id })
+          });
+        } catch (e) {}
+      }
+    }
     return true;
   }
 
@@ -610,7 +727,7 @@ class Store {
 
   // --- Google Sheets & Instant Email Dispatcher Engine ---
   async dispatchOrderToGoogleSheetsAndEmail(booking) {
-    const WEBHOOK_URL = localStorage.getItem('nc_google_sheet_webhook') || (typeof window !== 'undefined' && window.NC_CONFIG?.GOOGLE_SHEET_WEBHOOK) || '';
+    const WEBHOOK_URL = this.getGoogleSheetWebhookUrl();
     const ADMIN_EMAIL = this.getNotificationEmails();
 
     const payload = {
