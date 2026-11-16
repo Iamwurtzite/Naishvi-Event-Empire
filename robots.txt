@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /vendor
+Disallow: /vendor/
+Disallow: /vendor-portal.html
+
+Sitemap: https://naishvieventempire.iamwurtzite.com/sitemap.xml
