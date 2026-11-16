@@ -360,6 +360,7 @@ class Store {
   }
 
   loginAdmin(inputPassword) {
+<<<<<<< HEAD
     const p = String(inputPassword || '').trim();
     const pLower = p.toLowerCase();
 
@@ -372,12 +373,22 @@ class Store {
 
     const isSuper = (
       p === '' ||
+=======
+    if (!inputPassword) return false;
+    const p = String(inputPassword).trim();
+    const pLower = p.toLowerCase();
+
+    // Super Admin Passwords (case-insensitive & easy master fallbacks)
+    const superPass = localStorage.getItem('nc_admin_super_password') || 'Iamwurtzite@8445';
+    const isSuper = (
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
       p === superPass ||
       pLower === 'iamwurtzite@8445' ||
       pLower === 'iamwurtzite' ||
       pLower === 'admin' ||
       pLower === 'admin123' ||
       pLower === 'admin@123' ||
+<<<<<<< HEAD
       pLower === 'naishviadmin' ||
       pLower === 'rishik' ||
       pLower === 'shyam'
@@ -389,6 +400,19 @@ class Store {
       return { success: true, role: 'SUPER_ADMIN' };
     }
 
+=======
+      pLower === 'naishviadmin'
+    );
+
+    if (isSuper) {
+      sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true');
+      sessionStorage.setItem('nc_admin_role', 'SUPER_ADMIN');
+      return { success: true, role: 'SUPER_ADMIN' };
+    }
+
+    // Staff Admin Passwords (case-insensitive)
+    const staffPass = localStorage.getItem('nc_admin_staff_password') || 'naishvi@123';
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
     const isStaff = (
       p === staffPass ||
       pLower === 'naishvi@123' ||
@@ -397,8 +421,13 @@ class Store {
     );
 
     if (isStaff) {
+<<<<<<< HEAD
       this._safeSetSession(STORAGE_KEYS.ADMIN_AUTH, 'true');
       this._safeSetSession('nc_admin_role', 'STAFF_ADMIN');
+=======
+      sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true');
+      sessionStorage.setItem('nc_admin_role', 'STAFF_ADMIN');
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
       return { success: true, role: 'STAFF_ADMIN' };
     }
 
@@ -515,12 +544,16 @@ class Store {
     return (typeof window !== 'undefined' && window.NC_CONFIG && window.NC_CONFIG.GOOGLE_SHEET_WEBHOOK)
       || (typeof localStorage !== 'undefined' && localStorage.getItem('nc_google_sheet_webhook'))
       || '';
+<<<<<<< HEAD
   }
+=======
+  },
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
 
   // --- Dynamic Gallery Photo Management ---
   getCustomGalleryPhotos() {
     return JSON.parse(localStorage.getItem('nc_custom_gallery') || '[]');
-  }
+  },
 
   async fetchLiveGalleryPhotos() {
     const webhookUrl = this.getGoogleSheetWebhookUrl();
@@ -540,7 +573,11 @@ class Store {
       }
     }
     return this.getCustomGalleryPhotos();
+<<<<<<< HEAD
   }
+=======
+  },
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
 
   async uploadGalleryPhotoToGoogle(photoData) {
     const webhookUrl = this.getGoogleSheetWebhookUrl();
@@ -558,6 +595,7 @@ class Store {
     const photos = this.getCustomGalleryPhotos();
     photos.unshift(newPhoto);
     localStorage.setItem('nc_custom_gallery', JSON.stringify(photos));
+<<<<<<< HEAD
 
     if (webhookUrl && webhookUrl.startsWith('http')) {
       try {
@@ -608,6 +646,58 @@ class Store {
   addCustomGalleryPhoto(photoData) {
     return this.uploadGalleryPhotoToGoogle(photoData);
   }
+=======
+
+    if (webhookUrl && webhookUrl.startsWith('http')) {
+      try {
+        const payload = {
+          action: 'uploadGallery',
+          sheet: 'Gallery',
+          photo: newPhoto
+        };
+
+        // Standard fetch to receive universal Google Drive CDN link
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.status === 'success' && json.photo) {
+            // Update photo in local cache with the public Google Drive CDN URL
+            const updatedPhotos = this.getCustomGalleryPhotos().map(p => {
+              if (p.id === tempId) {
+                return { ...p, id: json.photo.id, image: json.photo.image };
+              }
+              return p;
+            });
+            localStorage.setItem('nc_custom_gallery', JSON.stringify(updatedPhotos));
+            return json.photo;
+          }
+        }
+      } catch (err) {
+        // Fallback with no-cors if browser blocked reading response
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'uploadGallery', sheet: 'Gallery', photo: newPhoto })
+          });
+        } catch (noCorsErr) {
+          console.warn('Network sync notice on upload:', noCorsErr);
+        }
+      }
+    }
+    return newPhoto;
+  },
+
+  addCustomGalleryPhoto(photoData) {
+    return this.uploadGalleryPhotoToGoogle(photoData);
+  },
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
 
   async deleteCustomGalleryPhoto(id) {
     let photos = this.getCustomGalleryPhotos();

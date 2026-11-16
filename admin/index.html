@@ -451,7 +451,10 @@
             </span>
           </label>
           <div style="position: relative;">
+<<<<<<< HEAD
             <input type="password" id="adminInputPassword" class="form-control" placeholder="Enter master admin password" autofocus style="text-align: center; letter-spacing: 2px; font-size: 1.1rem; padding-right: 40px;" onkeydown="if(event.key==='Enter'){handleAdminLogin(event);}">
+=======
+            
             <button type="button" onclick="toggleAdminPasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;">
               <i class="fa-solid fa-eye" id="togglePasswordIconInline"></i>
             </button>
@@ -463,6 +466,28 @@
           <i class="fa-solid fa-lock-open"></i> Unlock Admin Dashboard
         </button>
 
+<<<<<<< HEAD
+=======
+        <!-- Quick Credential Auto-Fill Box -->
+        <div style="margin-top: 18px; padding: 14px; background: rgba(212,175,55,0.06); border: 1px dashed var(--border-gold); border-radius: var(--radius-sm); font-size: 0.8rem; color: #eeddb0; text-align: left;">
+          <div style="font-weight: 600; margin-bottom: 8px; color: var(--primary-gold); display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-key text-gold"></i> Default Administrator Credentials:
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px;">
+            <span><strong>Super Admin:</strong> <code style="color: #fff; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.3);">Iamwurtzite@8445</code></span>
+            <button type="button" class="btn btn-gold btn-sm" onclick="quickFillAdmin('Iamwurtzite@8445')" style="font-size: 0.72rem; padding: 3px 10px;">
+              <i class="fa-solid fa-bolt"></i> Auto Fill & Login
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <span><strong>Staff Admin:</strong> <code style="color: #fff; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.3);">naishvi@123</code> (or <code style="color: #fff;">admin</code>)</span>
+            <button type="button" class="btn btn-outline-gold btn-sm" onclick="quickFillAdmin('naishvi@123')" style="font-size: 0.72rem; padding: 3px 10px;">
+              Auto Fill
+            </button>
+          </div>
+        </div>
+
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
         <div style="font-size: 0.76rem; color: #717684; margin-top: 14px;">
           <i class="fa-solid fa-shield-halved text-gold"></i> Protected Management Console • Authorized Master Administrator Only
         </div>

@@ -36,6 +36,7 @@ function initAdminAuth() {
   }
 }
 
+<<<<<<< HEAD
 function handleAdminLogin(e) {
   if (e && typeof e.preventDefault === 'function') {
     e.preventDefault();
@@ -78,6 +79,8 @@ function handleAdminLogin(e) {
 }
 window.handleAdminLogin = handleAdminLogin;
 
+=======
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
 window.toggleAdminPasswordVisibility = function() {
   const input = document.getElementById('adminInputPassword');
   const icon = document.getElementById('togglePasswordIcon');
@@ -94,6 +97,24 @@ window.toggleAdminPasswordVisibility = function() {
   }
 };
 
+<<<<<<< HEAD
+=======
+window.quickFillAdmin = function(password) {
+  const input = document.getElementById('adminInputPassword');
+  if (input) {
+    input.value = password;
+    const form = document.getElementById('adminLoginForm');
+    if (form) {
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit();
+      } else {
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    }
+  }
+};
+
+>>>>>>> 0e1c2776e124518e5d5d38bec6903831d10f78fa
 function adminLogout() {
   if (window.ncStore) {
     window.ncStore.logoutAdmin();
