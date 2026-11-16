@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Naishvi Event Empire - Central State Store & Business Logic Engine
  * Manages bookings, quotations, vendors, assignments, reviews, notifications,
  * event catalogs, 18 service categories, Pandit Ji ceremonies, Agra venues,
@@ -332,7 +332,7 @@ class Store {
     try { sessionStorage.setItem(key, val); } catch (e) {}
     try { localStorage.setItem(key, val); } catch (e) {}
     if (typeof window !== 'undefined') window[key] = val;
-  },
+  }
 
   _safeGetSession(key) {
     try {
@@ -345,19 +345,19 @@ class Store {
     } catch (e) {}
     if (typeof window !== 'undefined') return window[key] || null;
     return null;
-  },
+  }
 
   checkAdminAuth() {
     return this._safeGetSession(STORAGE_KEYS.ADMIN_AUTH) === 'true';
-  },
+  }
 
   getAdminRole() {
     return this._safeGetSession('nc_admin_role') || 'SUPER_ADMIN';
-  },
+  }
 
   isSuperAdmin() {
     return this.getAdminRole() === 'SUPER_ADMIN';
-  },
+  }
 
   loginAdmin(inputPassword) {
     const p = String(inputPassword || '').trim();
@@ -412,9 +412,9 @@ class Store {
     const curr = currentPass.trim();
     const superPass = localStorage.getItem('nc_admin_super_password') || 'Iamwurtzite@8445';
 
-    // Strictly enforce: Only Super Admin (Iamwurtzite@8445) can modify passwords
+    // Strictly enforce: Only Super Admin can modify passwords
     if (curr !== superPass && curr !== 'Iamwurtzite@8445') {
-      return { success: false, message: 'Access Denied: Only Super Administrator (Iamwurtzite@8445) can update access passwords.' };
+      return { success: false, message: 'Access Denied: Only Super Administrator can update access passwords.' };
     }
     if (newPass.trim().length < 5) {
       return { success: false, message: 'New password must be at least 5 characters long.' };
@@ -515,12 +515,12 @@ class Store {
     return (typeof window !== 'undefined' && window.NC_CONFIG && window.NC_CONFIG.GOOGLE_SHEET_WEBHOOK)
       || (typeof localStorage !== 'undefined' && localStorage.getItem('nc_google_sheet_webhook'))
       || '';
-  },
+  }
 
   // --- Dynamic Gallery Photo Management ---
   getCustomGalleryPhotos() {
     return JSON.parse(localStorage.getItem('nc_custom_gallery') || '[]');
-  },
+  }
 
   async fetchLiveGalleryPhotos() {
     const webhookUrl = this.getGoogleSheetWebhookUrl();
@@ -540,7 +540,7 @@ class Store {
       }
     }
     return this.getCustomGalleryPhotos();
-  },
+  }
 
   async uploadGalleryPhotoToGoogle(photoData) {
     const webhookUrl = this.getGoogleSheetWebhookUrl();
@@ -603,11 +603,11 @@ class Store {
       }
     }
     return newPhoto;
-  },
+  }
 
   addCustomGalleryPhoto(photoData) {
     return this.uploadGalleryPhotoToGoogle(photoData);
-  },
+  }
 
   async deleteCustomGalleryPhoto(id) {
     let photos = this.getCustomGalleryPhotos();
@@ -644,7 +644,7 @@ class Store {
   }
 
   // --- Catalogs & Dynamic Card Management ---
-  get18Services() { return DEFAULT_18_SERVICES; },
+  get18Services() { return DEFAULT_18_SERVICES; }
 
   // Venues Dynamic Management
   getAgraVenues() {
@@ -657,7 +657,7 @@ class Store {
     }
     localStorage.setItem('nc_venues', JSON.stringify(DEFAULT_AGRA_VENUES));
     return DEFAULT_AGRA_VENUES;
-  },
+  }
   updateAgraVenue(id, updateData) {
     const list = this.getAgraVenues();
     const idx = list.findIndex(v => v.id === id);
@@ -667,11 +667,11 @@ class Store {
       return list[idx];
     }
     return null;
-  },
+  }
   resetVenuesToDefault() {
     localStorage.setItem('nc_venues', JSON.stringify(DEFAULT_AGRA_VENUES));
     return DEFAULT_AGRA_VENUES;
-  },
+  }
 
   // Music Services Dynamic Management
   getMusicServices() {
@@ -684,7 +684,7 @@ class Store {
     }
     localStorage.setItem('nc_music', JSON.stringify(DEFAULT_MUSIC_SERVICES));
     return DEFAULT_MUSIC_SERVICES;
-  },
+  }
   updateMusicService(id, updateData) {
     const list = this.getMusicServices();
     const idx = list.findIndex(m => m.id === id);
@@ -694,11 +694,11 @@ class Store {
       return list[idx];
     }
     return null;
-  },
+  }
   resetMusicToDefault() {
     localStorage.setItem('nc_music', JSON.stringify(DEFAULT_MUSIC_SERVICES));
     return DEFAULT_MUSIC_SERVICES;
-  },
+  }
 
   // Pandit Ceremonies Dynamic Management
   getPanditCeremonies() {
@@ -711,7 +711,7 @@ class Store {
     }
     localStorage.setItem('nc_pandit', JSON.stringify(DEFAULT_PANDIT_CEREMONIES));
     return DEFAULT_PANDIT_CEREMONIES;
-  },
+  }
   updatePanditCeremony(id, updateData) {
     const list = this.getPanditCeremonies();
     const idx = list.findIndex(p => p.id === id);
@@ -721,7 +721,7 @@ class Store {
       return list[idx];
     }
     return null;
-  },
+  }
   resetPanditToDefault() {
     localStorage.setItem('nc_pandit', JSON.stringify(DEFAULT_PANDIT_CEREMONIES));
     return DEFAULT_PANDIT_CEREMONIES;

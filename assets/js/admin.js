@@ -36,7 +36,7 @@ function initAdminAuth() {
   }
 }
 
-window.handleAdminLogin = function(e) {
+function handleAdminLogin(e) {
   if (e && typeof e.preventDefault === 'function') {
     e.preventDefault();
   }
@@ -47,9 +47,16 @@ window.handleAdminLogin = function(e) {
   const authModal = document.getElementById('adminLoginScreen');
   const dashboardContent = document.getElementById('adminDashboardContent');
 
-  // Accept pass or fallback to super admin
-  const passToTry = rawPass.trim() || 'Iamwurtzite@8445';
-  const loginResult = window.ncStore ? window.ncStore.loginAdmin(passToTry) : { success: true, role: 'SUPER_ADMIN' };
+  const passToTry = rawPass.trim();
+  if (!passToTry) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter administrator password.';
+      errorEl.style.display = 'block';
+    }
+    return false;
+  }
+
+  const loginResult = window.ncStore ? window.ncStore.loginAdmin(passToTry) : false;
 
   if (loginResult && (loginResult === true || loginResult.success)) {
     if (authModal) authModal.style.setProperty('display', 'none', 'important');
@@ -63,12 +70,13 @@ window.handleAdminLogin = function(e) {
     }
   } else {
     if (errorEl) {
-      errorEl.textContent = 'Incorrect admin password. Please try again or click Auto Fill.';
+      errorEl.textContent = 'Incorrect admin password. Please try again.';
       errorEl.style.display = 'block';
     }
   }
   return false;
-};
+}
+window.handleAdminLogin = handleAdminLogin;
 
 window.toggleAdminPasswordVisibility = function() {
   const input = document.getElementById('adminInputPassword');
@@ -84,14 +92,6 @@ window.toggleAdminPasswordVisibility = function() {
     if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
     if (iconInline) { iconInline.classList.remove('fa-eye-slash'); iconInline.classList.add('fa-eye'); }
   }
-};
-
-window.quickFillAdmin = function(password) {
-  const input = document.getElementById('adminInputPassword');
-  if (input) {
-    input.value = password;
-  }
-  window.handleAdminLogin();
 };
 
 function adminLogout() {
@@ -152,7 +152,7 @@ function loadGoogleSheetWebhook() {
 
 function saveGoogleSheetWebhook() {
   if (window.ncStore && !window.ncStore.isSuperAdmin()) {
-    alert('Access Denied: Only Super Administrator (Iamwurtzite@8445) has authority to change the Google Sheet Webhook URL.');
+    alert('Access Denied: Only Super Administrator has authority to change the Google Sheet Webhook URL.');
     return;
   }
   const input = document.getElementById('googleSheetUrlInput');
@@ -171,7 +171,7 @@ function loadNotificationEmails() {
 
 function saveNotificationEmails() {
   if (window.ncStore && !window.ncStore.isSuperAdmin()) {
-    alert('Access Denied: Only Super Administrator (Iamwurtzite@8445) has authority to update notification email recipients.');
+    alert('Access Denied: Only Super Administrator has authority to update notification email recipients.');
     return;
   }
   const input = document.getElementById('notificationEmailsInput');
@@ -1437,3 +1437,10 @@ function resetCurrentTabCardsToDefault() {
   renderUniversalCardsGrid(type);
   alert(`All ${type} cards restored to default.`);
 }
+
+// Ensure all universal card management functions are explicitly globally accessible
+window.switchUniversalCardTab = switchUniversalCardTab;
+window.renderUniversalCardsGrid = renderUniversalCardsGrid;
+window.openUniversalCardEditModal = openUniversalCardEditModal;
+window.saveUniversalCardEdits = saveUniversalCardEdits;
+window.resetCurrentTabCardsToDefault = resetCurrentTabCardsToDefault;
