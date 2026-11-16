@@ -316,6 +316,10 @@ class Store {
     if (!localStorage.getItem('nc_events')) {
       localStorage.setItem('nc_events', JSON.stringify(DEFAULT_EVENTS));
     }
+
+    // Always clear legacy persistent localStorage admin auth so session strictly requires login
+    try { localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH); } catch (e) {}
+    try { localStorage.removeItem('nc_admin_role'); } catch (e) {}
   }
 
   // Purge all sample / test data tool for clean database
@@ -328,31 +332,20 @@ class Store {
   }
 
   // --- Two-Tier Admin Security & Role Management ---
-  _safeSetSession(key, val) {
-    try { sessionStorage.setItem(key, val); } catch (e) {}
-    try { localStorage.setItem(key, val); } catch (e) {}
-    if (typeof window !== 'undefined') window[key] = val;
-  }
-
-  _safeGetSession(key) {
-    try {
-      const v = sessionStorage.getItem(key);
-      if (v) return v;
-    } catch (e) {}
-    try {
-      const v = localStorage.getItem(key);
-      if (v) return v;
-    } catch (e) {}
-    if (typeof window !== 'undefined') return window[key] || null;
-    return null;
-  }
-
   checkAdminAuth() {
-    return this._safeGetSession(STORAGE_KEYS.ADMIN_AUTH) === 'true';
+    try {
+      return sessionStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === 'true';
+    } catch (e) {
+      return false;
+    }
   }
 
   getAdminRole() {
-    return this._safeGetSession('nc_admin_role') || 'SUPER_ADMIN';
+    try {
+      return sessionStorage.getItem('nc_admin_role') || 'STAFF_ADMIN';
+    } catch (e) {
+      return 'STAFF_ADMIN';
+    }
   }
 
   isSuperAdmin() {
@@ -361,44 +354,43 @@ class Store {
 
   loginAdmin(inputPassword) {
     const p = String(inputPassword || '').trim();
-    const pLower = p.toLowerCase();
+    if (!p) return false;
 
-    // If empty or matches any of these, grant access
     let superPass = 'Iamwurtzite@8445';
-    try { superPass = localStorage.getItem('nc_admin_super_password') || 'Iamwurtzite@8445'; } catch (e) {}
+    try {
+      superPass = localStorage.getItem('nc_admin_super_password') || 'Iamwurtzite@8445';
+    } catch (e) {}
 
     let staffPass = 'naishvi@123';
-    try { staffPass = localStorage.getItem('nc_admin_staff_password') || 'naishvi@123'; } catch (e) {}
+    try {
+      staffPass = localStorage.getItem('nc_admin_staff_password') || 'naishvi@123';
+    } catch (e) {}
 
+    // Check Master Super Admin Password
     const isSuper = (
-      p === '' ||
       p === superPass ||
-      pLower === 'iamwurtzite@8445' ||
-      pLower === 'iamwurtzite' ||
-      pLower === 'admin' ||
-      pLower === 'admin123' ||
-      pLower === 'admin@123' ||
-      pLower === 'naishviadmin' ||
-      pLower === 'rishik' ||
-      pLower === 'shyam'
+      p.toLowerCase() === superPass.toLowerCase() ||
+      p.toLowerCase() === 'iamwurtzite@8445'
     );
 
     if (isSuper) {
-      this._safeSetSession(STORAGE_KEYS.ADMIN_AUTH, 'true');
-      this._safeSetSession('nc_admin_role', 'SUPER_ADMIN');
+      try { sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true'); } catch (e) {}
+      try { sessionStorage.setItem('nc_admin_role', 'SUPER_ADMIN'); } catch (e) {}
+      try { localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH); } catch (e) {}
       return { success: true, role: 'SUPER_ADMIN' };
     }
 
+    // Check Staff Admin Password
     const isStaff = (
       p === staffPass ||
-      pLower === 'naishvi@123' ||
-      pLower === 'naishvi123' ||
-      pLower === 'naishvi'
+      p.toLowerCase() === staffPass.toLowerCase() ||
+      p.toLowerCase() === 'naishvi@123'
     );
 
     if (isStaff) {
-      this._safeSetSession(STORAGE_KEYS.ADMIN_AUTH, 'true');
-      this._safeSetSession('nc_admin_role', 'STAFF_ADMIN');
+      try { sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, 'true'); } catch (e) {}
+      try { sessionStorage.setItem('nc_admin_role', 'STAFF_ADMIN'); } catch (e) {}
+      try { localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH); } catch (e) {}
       return { success: true, role: 'STAFF_ADMIN' };
     }
 
@@ -430,8 +422,10 @@ class Store {
   }
 
   logoutAdmin() {
-    sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
-    sessionStorage.removeItem('nc_admin_role');
+    try { sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH); } catch (e) {}
+    try { sessionStorage.removeItem('nc_admin_role'); } catch (e) {}
+    try { localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH); } catch (e) {}
+    try { localStorage.removeItem('nc_admin_role'); } catch (e) {}
   }
 
   // --- Notification Multi-Email Settings (Protected for Super Admin) ---

@@ -15,16 +15,19 @@ if (document.readyState === 'loading') {
 
 // Authentication System
 function initAdminAuth() {
-  const isAuth = window.ncStore?.checkAdminAuth();
+  const isAuth = window.ncStore ? window.ncStore.checkAdminAuth() : false;
   const authModal = document.getElementById('adminLoginScreen');
   const dashboardContent = document.getElementById('adminDashboardContent');
+  const headerActions = document.getElementById('adminHeaderActions');
 
   if (!isAuth) {
     if (authModal) authModal.style.setProperty('display', 'flex', 'important');
     if (dashboardContent) dashboardContent.style.setProperty('display', 'none', 'important');
+    if (headerActions) headerActions.style.setProperty('display', 'none', 'important');
   } else {
     if (authModal) authModal.style.setProperty('display', 'none', 'important');
     if (dashboardContent) dashboardContent.style.setProperty('display', 'block', 'important');
+    if (headerActions) headerActions.style.setProperty('display', 'flex', 'important');
     bootAdminDashboard();
   }
 
@@ -46,6 +49,7 @@ function handleAdminLogin(e) {
   const errorEl = document.getElementById('adminAuthError');
   const authModal = document.getElementById('adminLoginScreen');
   const dashboardContent = document.getElementById('adminDashboardContent');
+  const headerActions = document.getElementById('adminHeaderActions');
 
   const passToTry = rawPass.trim();
   if (!passToTry) {
@@ -61,6 +65,7 @@ function handleAdminLogin(e) {
   if (loginResult && (loginResult === true || loginResult.success)) {
     if (authModal) authModal.style.setProperty('display', 'none', 'important');
     if (dashboardContent) dashboardContent.style.setProperty('display', 'block', 'important');
+    if (headerActions) headerActions.style.setProperty('display', 'flex', 'important');
     if (errorEl) errorEl.style.display = 'none';
 
     try {
@@ -70,7 +75,7 @@ function handleAdminLogin(e) {
     }
   } else {
     if (errorEl) {
-      errorEl.textContent = 'Incorrect admin password. Please try again.';
+      errorEl.textContent = 'Incorrect password! Please enter valid Master or Staff password.';
       errorEl.style.display = 'block';
     }
   }
