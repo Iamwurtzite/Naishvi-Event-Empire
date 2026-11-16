@@ -184,37 +184,37 @@ const DEFAULT_18_SERVICES = [
 
 // Music & Live Entertainment Sub-Services
 const DEFAULT_MUSIC_SERVICES = [
-  { id: 'mus-1', name: 'Ghazal Night & Sufi Mehfil', category: 'Mehfil & Sufi', duration: '3 - 4 Hours', price: 25000, icon: 'fa-microphone-lines', desc: 'Soulful live Mehfil-e-Ghazal singers with harmonium, tabla, and acoustic instruments creating a serene poetic ambiance.', popular: true },
-  { id: 'mus-2', name: 'Jagran & Bhajan Sandhya', category: 'Devotional & Sacred', duration: 'All Night / 4-6 Hours', price: 25000, icon: 'fa-hands-praying', desc: 'Devotional singer troupes, akhand darbar, live dholak, chimta, harmonium, and spiritual aarti for uplifting divine celebrations.', popular: true },
-  { id: 'mus-3', name: 'Mata Ki Chowki', category: 'Devotional & Sacred', duration: '3 - 4 Hours', price: 30000, icon: 'fa-fire', desc: 'Traditional red floral darbar setup, devotional sangeet, and live bhajans seeking divine blessings for bride and groom.', popular: true },
-  { id: 'mus-4', name: 'Interactive Karaoke Night', category: 'DJ & Modern', duration: '3 - 4 Hours', price: 12000, icon: 'fa-microphone', desc: 'Engaging family interactive singing setups with dual screens, wireless microphones, curated song playlists & host.' },
-  { id: 'mus-5', name: 'Classical Instrumental Ensemble', category: 'Live Bands & Classical', duration: '3 - 4 Hours', price: 18000, icon: 'fa-guitar', desc: 'Melodious classical ensembles: Shehnai for baraat, Sitar, Flute, and live Violinists for dining and reception hours.' },
-  { id: 'mus-6', name: 'Rajasthani Folk & Chari Dancers', category: 'Folk & Cultural', duration: '2 - 3 Hours', price: 20000, icon: 'fa-sun', desc: 'Authentic Manganiyar folk singers, Morchang players, and graceful Chari fire dancers for royal traditional charm.', popular: true },
-  { id: 'mus-7', name: 'Acoustic Bollywood & Sufi Band', category: 'Live Bands & Classical', duration: '3 - 4 Hours', price: 22000, icon: 'fa-music', desc: 'Unplugged Bollywood and Sufi acoustic bands for intimate cocktail parties, poolside mehendi, and sundowner hours.' },
-  { id: 'mus-8', name: 'Wedding Sangeet Performances', category: 'Live Bands & Classical', duration: 'Full Evening', price: 25000, icon: 'fa-people-group', desc: 'Custom audio soundtracks, concert sound engineering, choreographed family group dances & grand stage entries.' },
-  { id: 'mus-9', name: 'Dance Troupe & LED Tron Acts', category: 'Dancers & Anchors', duration: '2 - 3 Hours', price: 35000, icon: 'fa-person-running', desc: 'Professional Bollywood dancers, LED Tron light dancers, Russian performers, and international welcome troupes.' },
-  { id: 'mus-10', name: 'Celebrity Anchor & Music Host', category: 'Dancers & Anchors', duration: 'Full Function', price: 15000, icon: 'fa-bullhorn', desc: 'High-energy bilingual celebrity anchors to engage guests, conduct interactive games, and host functions seamlessly.' },
-  { id: 'mus-11', name: 'Live Sufi Qawwali Ensemble', category: 'Mehfil & Sufi', duration: '3 - 4 Hours', price: 28000, icon: 'fa-compact-disc', desc: 'Mesmerizing Sufi Qawwali troupe with traditional clapping clappers, harmonium, and dholak creating a mystical spiritual high.' },
-  { id: 'mus-12', name: 'Royal Punjabi Dhol & Bhangra Squad', category: 'Folk & Cultural', duration: '2 - 3 Hours', price: 22000, icon: 'fa-drum', desc: 'Energetic Punjabi dhol beats, festive boliyan, and vibrant Bhangra dancers to electrify baraat processions and sangeet night.' }
+  { id: 'mus-1', name: 'Ghazal Night & Sufi Mehfil', category: 'Mehfil & Sufi', duration: '3 - 4 Hours', price: 25000, icon: 'fa-microphone-lines', image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80', desc: 'Soulful live Mehfil-e-Ghazal singers with harmonium, tabla, and acoustic instruments creating a serene poetic ambiance.', popular: true },
+  { id: 'mus-2', name: 'Jagran & Bhajan Sandhya', category: 'Devotional & Sacred', duration: 'All Night / 4-6 Hours', price: 25000, icon: 'fa-hands-praying', image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80', desc: 'Devotional singer troupes, akhand darbar, live dholak, chimta, harmonium, and spiritual aarti for uplifting divine celebrations.', popular: true },
+  { id: 'mus-3', name: 'Mata Ki Chowki', category: 'Devotional & Sacred', duration: '3 - 4 Hours', price: 30000, icon: 'fa-fire', image: 'https://images.unsplash.com/photo-1609800318047-9ea8848a2872?auto=format&fit=crop&w=800&q=80', desc: 'Traditional red floral darbar setup, devotional sangeet, and live bhajans seeking divine blessings for bride and groom.', popular: true },
+  { id: 'mus-4', name: 'Interactive Karaoke Night', category: 'DJ & Modern', duration: '3 - 4 Hours', price: 12000, icon: 'fa-microphone', image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', desc: 'Engaging family interactive singing setups with dual screens, wireless microphones, curated song playlists & host.' },
+  { id: 'mus-5', name: 'Classical Instrumental Ensemble', category: 'Live Bands & Classical', duration: '3 - 4 Hours', price: 18000, icon: 'fa-guitar', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: 'Melodious classical ensembles: Shehnai for baraat, Sitar, Flute, and live Violinists for dining and reception hours.' },
+  { id: 'mus-6', name: 'Rajasthani Folk & Chari Dancers', category: 'Folk & Cultural', duration: '2 - 3 Hours', price: 20000, icon: 'fa-sun', image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80', desc: 'Authentic Manganiyar folk singers, Morchang players, and graceful Chari fire dancers for royal traditional charm.', popular: true },
+  { id: 'mus-7', name: 'Acoustic Bollywood & Sufi Band', category: 'Live Bands & Classical', duration: '3 - 4 Hours', price: 22000, icon: 'fa-music', image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80', desc: 'Unplugged Bollywood and Sufi acoustic bands for intimate cocktail parties, poolside mehendi, and sundowner hours.' },
+  { id: 'mus-8', name: 'Wedding Sangeet Performances', category: 'Live Bands & Classical', duration: 'Full Evening', price: 25000, icon: 'fa-people-group', image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80', desc: 'Custom audio soundtracks, concert sound engineering, choreographed family group dances & grand stage entries.' },
+  { id: 'mus-9', name: 'Dance Troupe & LED Tron Acts', category: 'Dancers & Anchors', duration: '2 - 3 Hours', price: 35000, icon: 'fa-person-running', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80', desc: 'Professional Bollywood dancers, LED Tron light dancers, Russian performers, and international welcome troupes.' },
+  { id: 'mus-10', name: 'Celebrity Anchor & Music Host', category: 'Dancers & Anchors', duration: 'Full Function', price: 15000, icon: 'fa-bullhorn', image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80', desc: 'High-energy bilingual celebrity anchors to engage guests, conduct interactive games, and host functions seamlessly.' },
+  { id: 'mus-11', name: 'Live Sufi Qawwali Ensemble', category: 'Mehfil & Sufi', duration: '3 - 4 Hours', price: 28000, icon: 'fa-compact-disc', image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80', desc: 'Mesmerizing Sufi Qawwali troupe with traditional clapping clappers, harmonium, and dholak creating a mystical spiritual high.' },
+  { id: 'mus-12', name: 'Royal Punjabi Dhol & Bhangra Squad', category: 'Folk & Cultural', duration: '2 - 3 Hours', price: 22000, icon: 'fa-drum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', desc: 'Energetic Punjabi dhol beats, festive boliyan, and vibrant Bhangra dancers to electrify baraat processions and sangeet night.' }
 ];
 
 // 15 Pandit Ji & Religious Pooja Ceremonies (Image 6 & 7)
 const DEFAULT_PANDIT_CEREMONIES = [
-  { id: 'puj-1', name: 'Wedding Pandit Ji & Vivah Sanskar', duration: '3 - 4 Hours', desc: 'Complete Vedic wedding rites: Kanyadaan, Panigrahana, Saptapadi (7 Pheras), Havan, and sacred mantras.' },
-  { id: 'puj-2', name: 'Roka & Engagement Puja', duration: '1 - 2 Hours', desc: 'Lord Ganesha invocation, Tilak ceremony, Kundali Milan review, and shagun blessings.' },
-  { id: 'puj-3', name: 'Ganesh Puja (Vighnaharta Sthapana)', duration: '1 Hour', desc: 'Inaugural ceremony before all festivities to remove obstacles and invoke auspicious grace.' },
-  { id: 'puj-4', name: 'Haldi & Mehndi Puja', duration: '1 Hour', desc: 'Traditional Vedic cleansing rituals, turmeric blessing, and prayers for health and radiance.' },
-  { id: 'puj-5', name: 'Griha Pravesh Puja & Vastu Shanti', duration: '2 - 3 Hours', desc: 'Navagraha havan, Vastu Purush invocation, cow worship, and boiling milk ritual for new homes.' },
-  { id: 'puj-6', name: 'Satyanarayan Katha', duration: '2 Hours', desc: 'Sacred narrative recital of Lord Vishnu, panchamrit offering, havan, and satvik prasad.' },
-  { id: 'puj-7', name: 'Havan & Yagya', duration: '1.5 - 2 Hours', desc: 'Purifying fire rituals with authentic Vedic samagri, ghee, and mantras for positive household energy.' },
-  { id: 'puj-8', name: 'Mata Ki Chowki', duration: '3 - 4 Hours', desc: 'Devotional prayers, Akhand Jyot invocation, Mata ki bhent recital, and Aarti.' },
-  { id: 'puj-9', name: 'Mundan Sanskar (Chudakarana)', duration: '1 Hour', desc: 'First sacred haircut ceremony for the child with Vedic purification rites.' },
-  { id: 'puj-10', name: 'Naamkaran Sanskar (Naming Ceremony)', duration: '1 Hour', desc: 'Auspicious naming of the newborn based on Janma Nakshatra and astrological guidance.' },
-  { id: 'puj-11', name: 'Anniversary Puja', duration: '1.5 Hours', desc: 'Gauri-Shankar prayers celebrating matrimonial harmony and seeking long-term prosperity.' },
-  { id: 'puj-12', name: 'Vastu Shanti Puja', duration: '2 Hours', desc: 'Rectification of residential/commercial directional energies for peace and abundance.' },
-  { id: 'puj-13', name: 'Rudrabhishek (Lord Shiva Puja)', duration: '2 Hours', desc: 'Sacred Jal and Panchamrit abhishek of Shivlingam with chanting of Shri Rudram.' },
-  { id: 'puj-14', name: 'Mahamrityunjaya Jaap', duration: 'Custom', desc: 'Chanting and havan for health, longevity, and liberation from chronic adversity.' },
-  { id: 'puj-15', name: 'Other Religious & Custom Sanskars', duration: 'Flexible', desc: 'Customized rituals according to your regional traditions (North Indian, Marwari, Punjabi, Gujarati).' }
+  { id: 'puj-1', name: 'Wedding Pandit Ji & Vivah Sanskar', duration: '3 - 4 Hours', price: 11000, image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80', desc: 'Complete Vedic wedding rites: Kanyadaan, Panigrahana, Saptapadi (7 Pheras), Havan, and sacred mantras.' },
+  { id: 'puj-2', name: 'Roka & Engagement Puja', duration: '1 - 2 Hours', price: 5100, image: 'https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&w=800&q=80', desc: 'Lord Ganesha invocation, Tilak ceremony, Kundali Milan review, and shagun blessings.' },
+  { id: 'puj-3', name: 'Ganesh Puja (Vighnaharta Sthapana)', duration: '1 Hour', price: 3100, image: 'https://images.unsplash.com/photo-1567591414240-e2ff0c48e895?auto=format&fit=crop&w=800&q=80', desc: 'Inaugural ceremony before all festivities to remove obstacles and invoke auspicious grace.' },
+  { id: 'puj-4', name: 'Haldi & Mehndi Puja', duration: '1 Hour', price: 3500, image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80', desc: 'Traditional Vedic cleansing rituals, turmeric blessing, and prayers for health and radiance.' },
+  { id: 'puj-5', name: 'Griha Pravesh Puja & Vastu Shanti', duration: '2 - 3 Hours', price: 7100, image: 'https://images.unsplash.com/photo-1609800318047-9ea8848a2872?auto=format&fit=crop&w=800&q=80', desc: 'Navagraha havan, Vastu Purush invocation, cow worship, and boiling milk ritual for new homes.' },
+  { id: 'puj-6', name: 'Satyanarayan Katha', duration: '2 Hours', price: 4100, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80', desc: 'Sacred narrative recital of Lord Vishnu, panchamrit offering, havan, and satvik prasad.' },
+  { id: 'puj-7', name: 'Havan & Yagya', duration: '1.5 - 2 Hours', price: 5100, image: 'https://images.unsplash.com/photo-1609800318047-9ea8848a2872?auto=format&fit=crop&w=800&q=80', desc: 'Purifying fire rituals with authentic Vedic samagri, ghee, and mantras for positive household energy.' },
+  { id: 'puj-8', name: 'Mata Ki Chowki', duration: '3 - 4 Hours', price: 11000, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80', desc: 'Devotional prayers, Akhand Jyot invocation, Mata ki bhent recital, and Aarti.' },
+  { id: 'puj-9', name: 'Mundan Sanskar (Chudakarana)', duration: '1 Hour', price: 3100, image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80', desc: 'First sacred haircut ceremony for the child with Vedic purification rites.' },
+  { id: 'puj-10', name: 'Naamkaran Sanskar (Naming Ceremony)', duration: '1 Hour', price: 3100, image: 'https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&w=800&q=80', desc: 'Auspicious naming of the newborn based on Janma Nakshatra and astrological guidance.' },
+  { id: 'puj-11', name: 'Anniversary Puja', duration: '1.5 Hours', price: 4100, image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', desc: 'Gauri-Shankar prayers celebrating matrimonial harmony and seeking long-term prosperity.' },
+  { id: 'puj-12', name: 'Vastu Shanti Puja', duration: '2 Hours', price: 6100, image: 'https://images.unsplash.com/photo-1567591414240-e2ff0c48e895?auto=format&fit=crop&w=800&q=80', desc: 'Rectification of residential/commercial directional energies for peace and abundance.' },
+  { id: 'puj-13', name: 'Rudrabhishek (Lord Shiva Puja)', duration: '2 Hours', price: 5100, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80', desc: 'Sacred Jal and Panchamrit abhishek of Shivlingam with chanting of Shri Rudram.' },
+  { id: 'puj-14', name: 'Mahamrityunjaya Jaap', duration: 'Custom', price: 15000, image: 'https://images.unsplash.com/photo-1609800318047-9ea8848a2872?auto=format&fit=crop&w=800&q=80', desc: 'Chanting and havan for health, longevity, and liberation from chronic adversity.' },
+  { id: 'puj-15', name: 'Other Religious & Custom Sanskars', duration: 'Flexible', price: 5100, image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80', desc: 'Customized rituals according to your regional traditions (North Indian, Marwari, Punjabi, Gujarati).' }
 ];
 
 // Agra Venue Directory (Image 1, 2 & 3)
@@ -643,11 +643,89 @@ class Store {
     };
   }
 
-  // --- Catalogs ---
-  get18Services() { return DEFAULT_18_SERVICES; }
-  getMusicServices() { return DEFAULT_MUSIC_SERVICES; }
-  getPanditCeremonies() { return DEFAULT_PANDIT_CEREMONIES; }
-  getAgraVenues() { return DEFAULT_AGRA_VENUES; }
+  // --- Catalogs & Dynamic Card Management ---
+  get18Services() { return DEFAULT_18_SERVICES; },
+
+  // Venues Dynamic Management
+  getAgraVenues() {
+    const custom = localStorage.getItem('nc_venues');
+    if (custom) {
+      try {
+        const parsed = JSON.parse(custom);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    localStorage.setItem('nc_venues', JSON.stringify(DEFAULT_AGRA_VENUES));
+    return DEFAULT_AGRA_VENUES;
+  },
+  updateAgraVenue(id, updateData) {
+    const list = this.getAgraVenues();
+    const idx = list.findIndex(v => v.id === id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...updateData };
+      localStorage.setItem('nc_venues', JSON.stringify(list));
+      return list[idx];
+    }
+    return null;
+  },
+  resetVenuesToDefault() {
+    localStorage.setItem('nc_venues', JSON.stringify(DEFAULT_AGRA_VENUES));
+    return DEFAULT_AGRA_VENUES;
+  },
+
+  // Music Services Dynamic Management
+  getMusicServices() {
+    const custom = localStorage.getItem('nc_music');
+    if (custom) {
+      try {
+        const parsed = JSON.parse(custom);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    localStorage.setItem('nc_music', JSON.stringify(DEFAULT_MUSIC_SERVICES));
+    return DEFAULT_MUSIC_SERVICES;
+  },
+  updateMusicService(id, updateData) {
+    const list = this.getMusicServices();
+    const idx = list.findIndex(m => m.id === id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...updateData };
+      localStorage.setItem('nc_music', JSON.stringify(list));
+      return list[idx];
+    }
+    return null;
+  },
+  resetMusicToDefault() {
+    localStorage.setItem('nc_music', JSON.stringify(DEFAULT_MUSIC_SERVICES));
+    return DEFAULT_MUSIC_SERVICES;
+  },
+
+  // Pandit Ceremonies Dynamic Management
+  getPanditCeremonies() {
+    const custom = localStorage.getItem('nc_pandit');
+    if (custom) {
+      try {
+        const parsed = JSON.parse(custom);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    localStorage.setItem('nc_pandit', JSON.stringify(DEFAULT_PANDIT_CEREMONIES));
+    return DEFAULT_PANDIT_CEREMONIES;
+  },
+  updatePanditCeremony(id, updateData) {
+    const list = this.getPanditCeremonies();
+    const idx = list.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...updateData };
+      localStorage.setItem('nc_pandit', JSON.stringify(list));
+      return list[idx];
+    }
+    return null;
+  },
+  resetPanditToDefault() {
+    localStorage.setItem('nc_pandit', JSON.stringify(DEFAULT_PANDIT_CEREMONIES));
+    return DEFAULT_PANDIT_CEREMONIES;
+  }
 
   // --- Bookings ---
   getBookings() {

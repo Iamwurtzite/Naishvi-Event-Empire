@@ -352,21 +352,31 @@
 
       if (grid) {
         grid.innerHTML = ceremonies.map(c => `
-          <div class="pooja-card">
-            <div>
-              <span class="pooja-badge"><i class="fa-solid fa-clock"></i> ${c.duration}</span>
-              <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 8px;">${c.name}</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
-                ${c.desc}
-              </p>
+          <div class="pooja-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="height: 160px; position: relative; background: #000; overflow: hidden;">
+              <img src="${c.image || 'assets/images/logo.jpg'}" alt="${c.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='assets/images/logo.jpg'">
+              <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.75); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">
+                <i class="fa-solid fa-clock text-gold"></i> ${c.duration}
+              </span>
+              <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.75); color: #25d366; border: 1px solid #25d366; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
+                Dakshina ₹${Number(c.price || 5100).toLocaleString('en-IN')}
+              </span>
             </div>
-            <div style="display: flex; gap: 8px; margin-top: 10px;">
-              <button type="button" class="btn btn-gold btn-sm" style="flex-grow: 1;" onclick="selectPoojaAndScroll('${c.name}')">
-                Book Puja
-              </button>
-              <a href="https://api.whatsapp.com/send?phone=918279622416&text=${encodeURIComponent(`Namaste Naishvi Event Empire! I want to inquire about booking Pandit Ji for ${c.name} in Agra.`)}" target="_blank" class="btn btn-outline-gold btn-sm">
-                <i class="fa-brands fa-whatsapp text-success"></i>
-              </a>
+            <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 8px;">${c.name}</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+                  ${c.desc}
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button type="button" class="btn btn-gold btn-sm" style="flex-grow: 1;" onclick="selectPoojaAndScroll('${c.name}')">
+                  <i class="fa-solid fa-om"></i> Book Puja
+                </button>
+                <a href="https://api.whatsapp.com/send?phone=918279622416&text=${encodeURIComponent(`Namaste Naishvi Event Empire! I want to inquire about booking Pandit Ji for ${c.name} in Agra.`)}" target="_blank" class="btn btn-outline-gold btn-sm">
+                  <i class="fa-brands fa-whatsapp text-success"></i>
+                </a>
+              </div>
             </div>
           </div>
         `).join('');

@@ -535,6 +535,49 @@
         </div>
       </div>
 
+      <!-- ===================================================================== -->
+      <!-- MASTER WEBSITE IMAGE CARDS & CONTENT EDITOR                           -->
+      <!-- Edit images, pricing, titles, and details for ALL cards across site    -->
+      <!-- ===================================================================== -->
+      <div class="admin-card" id="allCardsManagerSection" style="margin-top: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 4px;">
+              <i class="fa-solid fa-layer-group text-gold"></i> All Website Image Cards & Content Editor
+            </h3>
+            <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+              Click any card below to replace its cover image, update pricing, title, or details. Changes reflect instantly on live website pages.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline-gold btn-sm" onclick="resetCurrentTabCardsToDefault()">
+              <i class="fa-solid fa-rotate-left"></i> Reset Category to Default
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div style="display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px;">
+          <button type="button" class="admin-filter-pill active" id="tabBtnVenues" onclick="switchUniversalCardTab('venues', this)">
+            <i class="fa-solid fa-hotel text-gold"></i> 1. Agra Venues (8 Cards)
+          </button>
+          <button type="button" class="admin-filter-pill" id="tabBtnMusic" onclick="switchUniversalCardTab('music', this)">
+            <i class="fa-solid fa-music text-gold"></i> 2. Music & Entertainment (12 Cards)
+          </button>
+          <button type="button" class="admin-filter-pill" id="tabBtnPandit" onclick="switchUniversalCardTab('pandit', this)">
+            <i class="fa-solid fa-om text-gold"></i> 3. Pandit Ji & Pooja (15 Cards)
+          </button>
+          <button type="button" class="admin-filter-pill" id="tabBtnEvents" onclick="switchUniversalCardTab('events', this)">
+            <i class="fa-solid fa-calendar-star text-gold"></i> 4. Wedding Ceremonies (6 Cards)
+          </button>
+        </div>
+
+        <!-- Universal Cards Grid -->
+        <div id="universalCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px;">
+          <!-- Loaded dynamically via admin.js -->
+        </div>
+      </div>
+
       <!-- LIVE WEBSITE GALLERY PHOTO UPLOADER & MANAGER                         -->
       <!-- ===================================================================== -->
       <div class="admin-card" id="galleryManagerSection">
@@ -990,6 +1033,82 @@
         <button type="submit" class="btn btn-gold btn-lg" style="width: 100%;">
           <i class="fa-solid fa-paper-plane"></i> Confirm & Notify Vendor
         </button>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- Universal Card & Image Editor Modal -->
+  <div class="modal-backdrop" id="universalCardEditModal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <button type="button" class="modal-close-btn" onclick="closeModal('universalCardEditModal')" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="cardModalTitle" style="color: #fff; font-size: 1.35rem; margin-bottom: 4px;">
+        <i class="fa-solid fa-pen-to-square text-gold"></i> Edit Website Card & Cover Image
+      </h3>
+      <p id="cardModalSubtitle" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px;">
+        Update title, pricing, details, and replace cover photo.
+      </p>
+
+      <form id="universalCardEditForm" onsubmit="saveUniversalCardForm(event)">
+        <input type="hidden" id="editCardType">
+        <input type="hidden" id="editCardId">
+
+        <div class="form-group">
+          <label class="form-label">Card Title / Ceremony / Venue Name *</label>
+          <input type="text" id="editCardName" class="form-control" placeholder="e.g. Jaypee Palace / Vivah Sanskar" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" id="editCardCategoryLabel">Category / Location</label>
+            <input type="text" id="editCardCategory" class="form-control" placeholder="e.g. Fatehabad Road / Classical">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="editCardPriceLabel">Starting Price / Rate</label>
+            <input type="text" id="editCardPrice" class="form-control" placeholder="e.g. 25000 or ₹2,800/plate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Card Description / Details</label>
+          <textarea id="editCardDesc" class="form-control" rows="3" placeholder="Enter service or venue description..."></textarea>
+        </div>
+
+        <!-- Cover Image Replacement -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px dashed var(--border-gold); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+          <label class="form-label" style="color: #eeddb0; margin-bottom: 10px;">
+            <i class="fa-solid fa-image text-gold"></i> Replace Cover Photo
+          </label>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <label style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Choose from Device</label>
+              <input type="file" id="editCardImageFile" class="form-control" accept="image/*" style="padding: 7px; font-size: 0.8rem;">
+            </div>
+            <div>
+              <label style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Or Direct Web Image URL</label>
+              <input type="url" id="editCardImageUrl" class="form-control" placeholder="https://..." style="font-size: 0.82rem;">
+            </div>
+          </div>
+
+          <div id="editCardPreviewBox" style="display: flex; align-items: center; gap: 14px;">
+            <img id="editCardPreviewImg" src="assets/images/logo.jpg" alt="Preview" style="width: 100px; height: 65px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-gold); background: #000;">
+            <div>
+              <span id="editCardPreviewStatus" style="font-size: 0.82rem; color: #fff; font-weight: 600; display: block;">Current Cover Photo</span>
+              <small style="color: var(--primary-gold-light); font-size: 0.74rem;">Ready to save</small>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline-gold" onclick="closeModal('universalCardEditModal')">Cancel</button>
+          <button type="submit" class="btn btn-gold">
+            <i class="fa-solid fa-floppy-disk"></i> Save & Publish Card Changes
+          </button>
+        </div>
       </form>
     </div>
   </div>

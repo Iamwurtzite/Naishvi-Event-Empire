@@ -522,30 +522,34 @@
       }
 
       grid.innerHTML = list.map(m => `
-        <div class="music-cat-card">
-          ${m.popular ? '<span style="position: absolute; top: 14px; right: 14px; background: rgba(212,175,55,0.2); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 2px 10px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;"><i class="fa-solid fa-crown text-gold"></i> Most Popular</span>' : ''}
-          <div>
-            <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(212,175,55,0.12); border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); font-size: 1.4rem; margin-bottom: 14px;">
-              <i class="fa-solid ${m.icon}"></i>
-            </div>
-            <span style="font-size: 0.72rem; background: rgba(212,175,55,0.15); border: 1px solid var(--border-gold); color: var(--primary-gold-light); padding: 3px 10px; border-radius: var(--radius-full); display: inline-block; margin-bottom: 8px;">${m.category}</span>
-            <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 6px;">${m.name}</h3>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; font-size: 0.8rem; color: #eeddb0;">
-              <span><i class="fa-solid fa-clock text-gold"></i> ${m.duration}</span>
-              <span>•</span>
-              <span style="color: var(--primary-gold); font-weight: 700;">Starting ₹${Number(m.price).toLocaleString('en-IN')}</span>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
-              ${m.desc}
-            </p>
+        <div class="music-cat-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="height: 170px; position: relative; background: #000; overflow: hidden;">
+            <img src="${m.image || 'assets/images/logo.jpg'}" alt="${m.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='assets/images/logo.jpg'">
+            <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.75); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">
+              ${m.category}
+            </span>
+            ${m.popular ? '<span style="position: absolute; top: 10px; right: 10px; background: rgba(104,13,29,0.85); color: #fff; border: 1px solid var(--border-gold); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;"><i class="fa-solid fa-crown text-gold"></i> Popular</span>' : ''}
           </div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn btn-gold btn-sm" onclick="selectMusicForBooking('${m.name}')" style="flex: 1; text-align: center;">
-              <i class="fa-solid fa-calendar-check"></i> Book Performance
-            </button>
-            <a href="https://api.whatsapp.com/send?phone=918279622416&text=${encodeURIComponent('Namaste Naishvi Event Empire! I want to inquire about booking ' + m.name + ' in Agra.')}" target="_blank" class="btn btn-outline-gold btn-sm" style="padding: 6px 12px;" title="WhatsApp Inquiry">
-              <i class="fa-brands fa-whatsapp text-gold"></i>
-            </a>
+          <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 6px;">${m.name}</h3>
+              <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; font-size: 0.8rem; color: #eeddb0;">
+                <span><i class="fa-solid fa-clock text-gold"></i> ${m.duration}</span>
+                <span>•</span>
+                <span style="color: var(--primary-gold); font-weight: 700;">Starting ₹${Number(m.price || 15000).toLocaleString('en-IN')}</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
+                ${m.desc}
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="selectMusicForBooking('${m.name}')" style="flex: 1; text-align: center;">
+                <i class="fa-solid fa-calendar-check"></i> Book Performance
+              </button>
+              <a href="https://api.whatsapp.com/send?phone=918279622416&text=${encodeURIComponent('Namaste Naishvi Event Empire! I want to inquire about booking ' + m.name + ' in Agra.')}" target="_blank" class="btn btn-outline-gold btn-sm" style="padding: 6px 12px;" title="WhatsApp Inquiry">
+                <i class="fa-brands fa-whatsapp text-gold"></i>
+              </a>
+            </div>
           </div>
         </div>
       `).join('');

@@ -121,7 +121,9 @@ function bootAdminDashboard() {
     initVendorAssignForm,
     renderNotificationsList,
     initGalleryUploadManager,
-    initAdminPasswordManager
+    initAdminPasswordManager,
+    renderUniversalCardsGrid,
+    initUniversalCardImageInputs
   ];
 
   tasks.forEach(fn => {
@@ -1203,4 +1205,235 @@ function resetEventsDefaultConfirm() {
     renderEventsManager();
     alert('All website events and pricing have been reset to default settings.');
   }
+}
+
+
+// =====================================================================
+// Universal Website Image Cards & Content Editor Controller
+// =====================================================================
+let currentUniversalCardTab = 'venues';
+let currentCardEditingImage = '';
+
+function switchUniversalCardTab(tab, btn) {
+  currentUniversalCardTab = tab;
+  document.querySelectorAll('#allCardsManagerSection .admin-filter-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderUniversalCardsGrid(tab);
+}
+
+function renderUniversalCardsGrid(tab = currentUniversalCardTab) {
+  const grid = document.getElementById('universalCardsGrid');
+  if (!grid || !window.ncStore) return;
+
+  let items = [];
+  let typeLabel = '';
+  let icon = 'fa-tag';
+
+  if (tab === 'venues') {
+    items = window.ncStore.getAgraVenues();
+    typeLabel = 'Agra Luxury Venue';
+    icon = 'fa-hotel';
+  } else if (tab === 'music') {
+    items = window.ncStore.getMusicServices();
+    typeLabel = 'Music & Entertainment';
+    icon = 'fa-music';
+  } else if (tab === 'pandit') {
+    items = window.ncStore.getPanditCeremonies();
+    typeLabel = 'Vedic Puja Ritual';
+    icon = 'fa-om';
+  } else if (tab === 'events') {
+    items = window.ncStore.getEvents();
+    typeLabel = 'Wedding Ceremony';
+    icon = 'fa-calendar-star';
+  }
+
+  if (!items || items.length === 0) {
+    grid.innerHTML = '<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: var(--text-muted);">No cards found in this category.</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(item => {
+    const cardTitle = item.name || 'Ceremony';
+    const cardImage = item.image || 'assets/images/logo.jpg';
+    const cardCategory = item.category || item.location || item.duration || typeLabel;
+    let priceBadge = '';
+    if (item.pricePerPlate) priceBadge = item.pricePerPlate;
+    else if (item.price) priceBadge = '₹' + Number(item.price).toLocaleString('en-IN');
+    else if (item.basePrice) priceBadge = 'Starting ₹' + Number(item.basePrice).toLocaleString('en-IN');
+    else priceBadge = item.duration || 'Bespoke';
+
+    const cardDesc = item.description || item.desc || '';
+
+    return `
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease;">
+        <div style="height: 160px; position: relative; background: #000; overflow: hidden;">
+          <img src="${cardImage}" alt="${cardTitle}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='assets/images/logo.jpg'">
+          <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">
+            <i class="fa-solid ${icon} text-gold"></i> ${cardCategory}
+          </span>
+          <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.85); color: #25d366; border: 1px solid rgba(37,211,102,0.4); padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
+            ${priceBadge}
+          </span>
+        </div>
+        <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 6px; line-height: 1.3;">${cardTitle}</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+              ${cardDesc}
+            </p>
+          </div>
+          <div style="margin-top: 10px;">
+            <button type="button" class="btn btn-outline-gold btn-sm" onclick="openUniversalCardEditModal('${tab}', '${item.id}')" style="width: 100%; font-size: 0.82rem; padding: 6px 12px;">
+              <i class="fa-solid fa-pen-to-square"></i> Edit Card & Cover Photo
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openUniversalCardEditModal(type, id) {
+  let item = null;
+  if (type === 'venues') item = window.ncStore.getAgraVenues().find(v => v.id === id);
+  else if (type === 'music') item = window.ncStore.getMusicServices().find(m => m.id === id);
+  else if (type === 'pandit') item = window.ncStore.getPanditCeremonies().find(p => p.id === id);
+  else if (type === 'events') item = window.ncStore.getEvents().find(e => e.id === id);
+
+  if (!item) return;
+
+  document.getElementById('editCardType').value = type;
+  document.getElementById('editCardId').value = id;
+  document.getElementById('editCardName').value = item.name || '';
+  document.getElementById('editCardCategory').value = item.category || item.location || item.duration || '';
+  document.getElementById('editCardPrice').value = item.price || item.basePrice || item.pricePerPlate || '';
+  document.getElementById('editCardDesc').value = item.description || item.desc || '';
+
+  currentCardEditingImage = item.image || '';
+  const previewImg = document.getElementById('editCardPreviewImg');
+  const previewStatus = document.getElementById('editCardPreviewStatus');
+  if (previewImg) previewImg.src = currentCardEditingImage || 'assets/images/logo.jpg';
+  if (previewStatus) previewStatus.textContent = 'Current Cover Photo';
+
+  const fileInput = document.getElementById('editCardImageFile');
+  const urlInput = document.getElementById('editCardImageUrl');
+  if (fileInput) fileInput.value = '';
+  if (urlInput) urlInput.value = (currentCardEditingImage && currentCardEditingImage.startsWith('http')) ? currentCardEditingImage : '';
+
+  const catLabel = document.getElementById('editCardCategoryLabel');
+  const priceLabel = document.getElementById('editCardPriceLabel');
+  if (type === 'venues') {
+    if (catLabel) catLabel.textContent = 'Venue Location / Agra Area';
+    if (priceLabel) priceLabel.textContent = 'Price Per Plate / Rate (e.g. ₹2,800+)';
+  } else if (type === 'music') {
+    if (catLabel) catLabel.textContent = 'Music Genre / Category';
+    if (priceLabel) priceLabel.textContent = 'Starting Performance Price (₹)';
+  } else if (type === 'pandit') {
+    if (catLabel) catLabel.textContent = 'Ceremony Duration';
+    if (priceLabel) priceLabel.textContent = 'Estimated Dakshina / Rate (₹)';
+  } else {
+    if (catLabel) catLabel.textContent = 'Ceremony Category';
+    if (priceLabel) priceLabel.textContent = 'Starting Package Price (₹)';
+  }
+
+  const modal = document.getElementById('universalCardEditModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function initUniversalCardImageInputs() {
+  const fileInput = document.getElementById('editCardImageFile');
+  const urlInput = document.getElementById('editCardImageUrl');
+  const previewImg = document.getElementById('editCardPreviewImg');
+  const previewStatus = document.getElementById('editCardPreviewStatus');
+
+  fileInput?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        if (previewStatus) previewStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-gold"></i> Compressing image...';
+        const compressed = await compressImageToDataUrl(file);
+        currentCardEditingImage = compressed;
+        if (previewImg) previewImg.src = compressed;
+        if (previewStatus) previewStatus.innerHTML = '<span style="color:#25d366;"><i class="fa-solid fa-check"></i> New Photo Ready</span>';
+        if (urlInput) urlInput.value = '';
+      } catch (err) {
+        console.error('Image compression error:', err);
+      }
+    }
+  });
+
+  urlInput?.addEventListener('input', (e) => {
+    const url = e.target.value.trim();
+    if (url) {
+      currentCardEditingImage = url;
+      if (previewImg) previewImg.src = url;
+      if (previewStatus) previewStatus.innerHTML = '<span style="color:#25d366;"><i class="fa-solid fa-link"></i> Web Link Attached</span>';
+      if (fileInput) fileInput.value = '';
+    }
+  });
+}
+
+function saveUniversalCardForm(e) {
+  e.preventDefault();
+  const type = document.getElementById('editCardType').value;
+  const id = document.getElementById('editCardId').value;
+  const name = document.getElementById('editCardName').value.trim();
+  const cat = document.getElementById('editCardCategory').value.trim();
+  const price = document.getElementById('editCardPrice').value.trim();
+  const desc = document.getElementById('editCardDesc').value.trim();
+  const urlInput = document.getElementById('editCardImageUrl');
+
+  const finalImage = currentCardEditingImage || urlInput?.value.trim() || 'assets/images/logo.jpg';
+
+  if (type === 'venues') {
+    window.ncStore.updateAgraVenue(id, {
+      name,
+      location: cat,
+      pricePerPlate: price,
+      description: desc,
+      image: finalImage
+    });
+  } else if (type === 'music') {
+    window.ncStore.updateMusicService(id, {
+      name,
+      category: cat,
+      price: Number(price.replace(/[^0-9]/g, '')) || 20000,
+      desc: desc,
+      image: finalImage
+    });
+  } else if (type === 'pandit') {
+    window.ncStore.updatePanditCeremony(id, {
+      name,
+      duration: cat,
+      price: Number(price.replace(/[^0-9]/g, '')) || 5100,
+      desc: desc,
+      image: finalImage
+    });
+  } else if (type === 'events') {
+    window.ncStore.updateEvent(id, {
+      name,
+      category: cat,
+      basePrice: Number(price.replace(/[^0-9]/g, '')) || 35000,
+      description: desc,
+      image: finalImage
+    });
+    renderEventsManager();
+  }
+
+  closeModal('universalCardEditModal');
+  renderUniversalCardsGrid(type);
+  alert(`🎉 Card updated successfully!\n\n"${name}" cover photo and details are now live on your website!`);
+}
+
+function resetCurrentTabCardsToDefault() {
+  const type = currentUniversalCardTab;
+  if (!confirm(`Are you sure you want to restore all ${type} cards and images back to original default settings?`)) return;
+
+  if (type === 'venues') window.ncStore.resetVenuesToDefault();
+  else if (type === 'music') window.ncStore.resetMusicToDefault();
+  else if (type === 'pandit') window.ncStore.resetPanditToDefault();
+  else if (type === 'events') window.ncStore.resetEventsToDefault();
+
+  renderUniversalCardsGrid(type);
+  alert(`All ${type} cards restored to default.`);
 }
