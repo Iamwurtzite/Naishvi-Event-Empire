@@ -531,78 +531,250 @@ function closeModal(id) {
 }
 
 // =====================================================================
-// Dynamic Website Gallery Upload Manager
+// Dynamic Website Gallery Upload Manager (Google Sheets & Cloud Drive)
 // =====================================================================
-let currentUploadedDataUrl = '';
+let selectedGalleryFiles = []; // Array of { id, file, name, sizeKb, dataUrl }
+
+// Client-side canvas image compressor (scales max dimension to 1600px, JPEG 0.85)
+function compressImageToDataUrl(file, maxWidth = 1600, maxHeight = 1600, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedDataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 function initGalleryUploadManager() {
   const form = document.getElementById('galleryUploadForm');
   const fileInput = document.getElementById('galleryFileInput');
   const urlInput = document.getElementById('galleryUrlInput');
   const previewBox = document.getElementById('galleryPreviewBox');
-  const previewImg = document.getElementById('galleryPreviewImg');
-  const previewText = document.getElementById('galleryPreviewText');
+  const multiPreview = document.getElementById('galleryMultiPreview');
+  const previewCount = document.getElementById('galleryPreviewCount');
+  const clearBtn = document.getElementById('clearGalleryFilesBtn');
+  const submitBtn = document.getElementById('gallerySubmitBtn');
+  const progressBar = document.getElementById('galleryUploadProgressBar');
+  const progressFill = document.getElementById('galleryUploadProgressFill');
+  const progressStatus = document.getElementById('galleryUploadProgressStatus');
 
   renderCustomGalleryList();
 
-  // Handle File Input Change
-  fileInput?.addEventListener('change', (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        currentUploadedDataUrl = event.target.result;
-        if (previewImg) previewImg.src = currentUploadedDataUrl;
-        if (previewText) previewText.textContent = `File selected: ${file.name}`;
-        if (previewBox) previewBox.style.display = 'flex';
-        if (urlInput) urlInput.value = '';
-      };
-      reader.readAsDataURL(file);
+  // Also trigger live fetch from Google Sheets on initial load
+  if (window.ncStore && window.ncStore.fetchLiveGalleryPhotos) {
+    window.ncStore.fetchLiveGalleryPhotos().then(() => {
+      renderCustomGalleryList();
+    }).catch(e => console.warn('Gallery sync note:', e));
+  }
+
+  // Handle Multi-File Selection
+  fileInput?.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    if (previewBox) previewBox.style.display = 'block';
+    if (previewCount) previewCount.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gold"></i> Processing & compressing ${files.length} photo(s)...`;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      try {
+        const compressedDataUrl = await compressImageToDataUrl(file);
+        selectedGalleryFiles.push({
+          id: 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          file: file,
+          name: file.name,
+          sizeKb: Math.round((compressedDataUrl.length * 0.75) / 1024),
+          dataUrl: compressedDataUrl
+        });
+      } catch (err) {
+        console.error('Compression error on file:', file.name, err);
+      }
     }
+
+    renderMultiFilePreview();
+    if (urlInput) urlInput.value = '';
+    fileInput.value = '';
   });
 
-  // Handle URL Input Change
+  // Handle URL input
   urlInput?.addEventListener('input', (e) => {
     const url = e.target.value.trim();
     if (url) {
-      currentUploadedDataUrl = url;
-      if (previewImg) previewImg.src = url;
-      if (previewText) previewText.textContent = 'Image URL linked';
-      if (previewBox) previewBox.style.display = 'flex';
-      if (fileInput) fileInput.value = '';
+      if (previewBox) previewBox.style.display = 'block';
+      if (previewCount) previewCount.innerHTML = `<i class="fa-solid fa-link text-gold"></i> Web Image URL Linked`;
+      if (multiPreview) {
+        multiPreview.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-gold);">
+            <img src="${url}" alt="Preview" style="width: 70px; height: 50px; object-fit: cover; border-radius: 4px;" onerror="this.src='assets/images/logo.jpg'">
+            <div>
+              <strong style="color: #fff; font-size: 0.82rem; display: block;">Web Image URL</strong>
+              <small style="color: var(--text-muted); font-size: 0.72rem; word-break: break-all;">${url.substring(0, 50)}...</small>
+            </div>
+          </div>
+        `;
+      }
+    } else if (selectedGalleryFiles.length === 0) {
+      if (previewBox) previewBox.style.display = 'none';
     }
   });
 
-  // Handle Form Submission
-  form?.addEventListener('submit', (e) => {
+  // Clear all button
+  clearBtn?.addEventListener('click', () => {
+    selectedGalleryFiles = [];
+    if (fileInput) fileInput.value = '';
+    if (urlInput) urlInput.value = '';
+    if (previewBox) previewBox.style.display = 'none';
+    if (multiPreview) multiPreview.innerHTML = '';
+  });
+
+  // Form Submission
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const category = document.getElementById('galleryCategorySelect').value;
-    const title = document.getElementById('galleryTitleInput').value.trim();
+    const baseTitle = document.getElementById('galleryTitleInput').value.trim();
     const location = document.getElementById('galleryLocationInput').value.trim() || 'Agra, UP';
+    const webUrl = urlInput?.value.trim();
 
-    const finalImage = currentUploadedDataUrl || urlInput?.value.trim();
+    const hasFiles = selectedGalleryFiles.length > 0;
+    const hasUrl = Boolean(webUrl);
 
-    if (!finalImage) {
-      alert('Please select an image file or enter an image web URL.');
+    if (!hasFiles && !hasUrl) {
+      alert('Please select at least one photo from your device or enter an image web URL.');
       return;
     }
 
-    window.ncStore.addCustomGalleryPhoto({
-      category,
-      title,
-      location,
-      image: finalImage
-    });
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing Upload...';
+    }
+    if (progressBar) progressBar.style.display = 'block';
+    if (progressStatus) progressStatus.style.display = 'block';
 
-    alert(`🎉 Photo successfully published to "${category}" category on gallery.html!`);
+    const queue = [];
+    if (hasFiles) {
+      selectedGalleryFiles.forEach((item, idx) => {
+        const itemTitle = selectedGalleryFiles.length > 1 ? `${baseTitle} (${idx + 1})` : baseTitle;
+        queue.push({
+          category,
+          title: itemTitle,
+          location,
+          image: item.dataUrl
+        });
+      });
+    } else if (hasUrl) {
+      queue.push({
+        category,
+        title: baseTitle,
+        location,
+        image: webUrl
+      });
+    }
 
-    // Reset Form
-    form.reset();
-    currentUploadedDataUrl = '';
-    if (previewBox) previewBox.style.display = 'none';
-    renderCustomGalleryList();
+    const total = queue.length;
+    let uploadedCount = 0;
+
+    for (let i = 0; i < total; i++) {
+      const photoItem = queue[i];
+      const percent = Math.round(((i) / total) * 100);
+      if (progressFill) progressFill.style.width = percent + '%';
+      if (progressStatus) progressStatus.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-gold"></i> Uploading photo ${i + 1} of ${total}: "${photoItem.title}" to Google Sheet & Drive...`;
+      if (submitBtn) submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading ${i + 1}/${total}...`;
+
+      try {
+        await window.ncStore.uploadGalleryPhotoToGoogle(photoItem);
+        uploadedCount++;
+      } catch (err) {
+        console.error('Failed to upload photo:', photoItem.title, err);
+      }
+    }
+
+    if (progressFill) progressFill.style.width = '100%';
+    if (progressStatus) progressStatus.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #25d366;"></i> All ${uploadedCount} photo(s) uploaded and synced to Google Sheets!`;
+
+    setTimeout(() => {
+      form.reset();
+      selectedGalleryFiles = [];
+      if (previewBox) previewBox.style.display = 'none';
+      if (progressBar) progressBar.style.display = 'none';
+      if (progressStatus) progressStatus.style.display = 'none';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload & Publish to Gallery';
+      }
+
+      alert(`🎉 Success! ${uploadedCount} photo(s) uploaded to Google Sheet & Drive!\n\nAll visitors on gallery.html across all devices and phones will now see these photos.`);
+      renderCustomGalleryList();
+    }, 800);
   });
 }
+
+function renderMultiFilePreview() {
+  const multiPreview = document.getElementById('galleryMultiPreview');
+  const previewCount = document.getElementById('galleryPreviewCount');
+  const previewBox = document.getElementById('galleryPreviewBox');
+  if (!multiPreview || !previewCount) return;
+
+  if (selectedGalleryFiles.length === 0) {
+    if (previewBox) previewBox.style.display = 'none';
+    multiPreview.innerHTML = '';
+    return;
+  }
+
+  if (previewBox) previewBox.style.display = 'block';
+  previewCount.innerHTML = `<i class="fa-solid fa-images text-gold"></i> Selected Photos (${selectedGalleryFiles.length} ready to upload)`;
+
+  multiPreview.innerHTML = selectedGalleryFiles.map((item) => `
+    <div style="position: relative; width: 85px; height: 65px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-gold); background: #000; flex-shrink: 0;" title="${item.name} (${item.sizeKb} KB)">
+      <img src="${item.dataUrl}" alt="Thumb" style="width: 100%; height: 100%; object-fit: cover;">
+      <button type="button" onclick="removeSingleGalleryFile('${item.id}')" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: rgba(220,38,38,0.9); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; line-height: 1;" title="Remove this photo">×</button>
+      <span style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: #eeddb0; font-size: 0.62rem; text-align: center; padding: 1px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        ${item.sizeKb} KB
+      </span>
+    </div>
+  `).join('');
+}
+
+window.removeSingleGalleryFile = function(id) {
+  selectedGalleryFiles = selectedGalleryFiles.filter(item => item.id !== id);
+  renderMultiFilePreview();
+};
+
+window.refreshCustomGalleryList = async function() {
+  const btn = document.getElementById('refreshGalleryBtn');
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing...';
+  if (window.ncStore && window.ncStore.fetchLiveGalleryPhotos) {
+    await window.ncStore.fetchLiveGalleryPhotos();
+  }
+  renderCustomGalleryList();
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Sync from Google Sheets';
+};
 
 function renderCustomGalleryList() {
   const container = document.getElementById('customGalleryList');
@@ -613,7 +785,7 @@ function renderCustomGalleryList() {
     container.innerHTML = `
       <div style="grid-column: 1 / -1; padding: 24px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-gold); border-radius: var(--radius-md); text-align: center; color: var(--text-muted); font-size: 0.88rem;">
         <i class="fa-solid fa-images text-gold" style="font-size: 1.8rem; margin-bottom: 8px; display: block;"></i>
-        No custom photos uploaded yet. Select a category above and upload photos to showcase your real Agra celebrations on <code>gallery.html</code>.
+        No custom photos uploaded yet. Select single or multiple photos above to upload them to Google Sheet and showcase your celebrations on <code>gallery.html</code>.
       </div>
     `;
     return;
@@ -631,7 +803,7 @@ function renderCustomGalleryList() {
   container.innerHTML = photos.map(p => `
     <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
       <div style="height: 140px; position: relative; overflow: hidden; background: #000;">
-        <img src="${p.image}" alt="${p.title}" style="width: 100%; height: 100%; object-fit: cover;">
+        <img src="${p.image}" alt="${p.title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='assets/images/logo.jpg'">
         <span style="position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.75); color: var(--primary-gold); border: 1px solid var(--border-gold); padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">
           ${catNames[p.category] || p.category}
         </span>
@@ -651,9 +823,9 @@ function renderCustomGalleryList() {
   `).join('');
 }
 
-function deleteCustomPhoto(id) {
-  if (confirm('Are you sure you want to remove this photo from the website gallery?')) {
-    window.ncStore.deleteCustomGalleryPhoto(id);
+async function deleteCustomPhoto(id) {
+  if (confirm('Are you sure you want to remove this photo from the website gallery and Google Sheet?')) {
+    await window.ncStore.deleteCustomGalleryPhoto(id);
     renderCustomGalleryList();
   }
 }
