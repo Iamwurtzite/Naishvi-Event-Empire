@@ -353,16 +353,53 @@
         Naishvi Event Empire Central Management Desk. Please enter your administrator password to unlock.
       </p>
 
-      <form id="adminLoginForm">
+      <form id="adminLoginForm" onsubmit="return handleAdminLogin(event);">
         <div class="form-group" style="text-align: left;">
-          <label class="form-label">Master Admin Password *</label>
-          <input type="password" id="adminInputPassword" class="form-control" placeholder="Enter master admin password" required autofocus style="text-align: center; letter-spacing: 2px; font-size: 1.1rem;">
+          <label class="form-label" style="display: flex; justify-content: space-between;">
+            <span>Master Admin Password *</span>
+            <span style="cursor: pointer; color: var(--primary-gold); font-size: 0.8rem;" onclick="toggleAdminPasswordVisibility()">
+              <i class="fa-solid fa-eye" id="togglePasswordIcon"></i> Show Password
+            </span>
+          </label>
+          <div style="position: relative;">
+            <input type="password" id="adminInputPassword" class="form-control" placeholder="Enter master admin password" autofocus style="text-align: center; letter-spacing: 2px; font-size: 1.1rem; padding-right: 40px;" onkeydown="if(event.key==='Enter'){handleAdminLogin(event);}">
+            <button type="button" onclick="toggleAdminPasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;">
+              <i class="fa-solid fa-eye" id="togglePasswordIconInline"></i>
+            </button>
+          </div>
           <div id="adminAuthError" style="display: none; color: #ef4444; font-size: 0.82rem; margin-top: 6px; text-align: center;"></div>
         </div>
-        <button type="submit" class="btn btn-gold btn-lg" style="width: 100%;">
-          <i class="fa-solid fa-lock"></i> Unlock Admin Dashboard
+
+        <button type="button" onclick="handleAdminLogin(event)" class="btn btn-gold btn-lg" style="width: 100%;">
+          <i class="fa-solid fa-lock-open"></i> Unlock Admin Dashboard
         </button>
-        <div style="font-size: 0.78rem; color: #717684; margin-top: 14px;">
+
+        <div style="margin-top: 10px;">
+          <button type="button" class="btn btn-outline-gold btn-sm" onclick="quickFillAdmin('Iamwurtzite@8445')" style="width: 100%; font-size: 0.84rem; padding: 8px;">
+            <i class="fa-solid fa-bolt text-gold"></i> One-Click Master Unlock (Instant Access)
+          </button>
+        </div>
+
+        <!-- Quick Credential Auto-Fill Box -->
+        <div style="margin-top: 16px; padding: 14px; background: rgba(212,175,55,0.06); border: 1px dashed var(--border-gold); border-radius: var(--radius-sm); font-size: 0.8rem; color: #eeddb0; text-align: left;">
+          <div style="font-weight: 600; margin-bottom: 8px; color: var(--primary-gold); display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-key text-gold"></i> Default Administrator Credentials:
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px;">
+            <span><strong>Super Admin:</strong> <code style="color: #fff; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.3);">Iamwurtzite@8445</code></span>
+            <button type="button" class="btn btn-gold btn-sm" onclick="quickFillAdmin('Iamwurtzite@8445')" style="font-size: 0.72rem; padding: 3px 10px;">
+              <i class="fa-solid fa-bolt"></i> Auto Fill & Login
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <span><strong>Staff Admin:</strong> <code style="color: #fff; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.3);">naishvi@123</code> (or <code style="color: #fff;">admin</code>)</span>
+            <button type="button" class="btn btn-outline-gold btn-sm" onclick="quickFillAdmin('naishvi@123')" style="font-size: 0.72rem; padding: 3px 10px;">
+              Auto Fill
+            </button>
+          </div>
+        </div>
+
+        <div style="font-size: 0.76rem; color: #717684; margin-top: 14px;">
           <i class="fa-solid fa-shield-halved text-gold"></i> Protected Management Console • Authorized Master Administrator Only
         </div>
       </form>
@@ -501,13 +538,13 @@
         <div class="admin-card-header">
           <div>
             <h3 class="admin-card-title">
-              <i class="fa-solid fa-images text-gold"></i> Website Gallery Photo Manager & Live Uploader
+              <i class="fa-solid fa-images text-gold"></i> Website Gallery Photo Manager & Cloud Uploader
             </h3>
             <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
-              Upload celebration photographs directly to any of the 6 official website categories. Photos publish instantly to <code>gallery.html</code>.
+              Upload single or multiple celebration photographs directly to your Google Drive & Sheets. Photos publish instantly to <code>gallery.html</code> for all visitors worldwide.
             </p>
           </div>
-          <span class="status-badge badge-confirmed"><i class="fa-solid fa-check"></i> 6 Active Categories</span>
+          <span class="status-badge badge-confirmed"><i class="fa-solid fa-cloud-arrow-up"></i> Google Sheets & Drive Sync Active</span>
         </div>
 
         <form id="galleryUploadForm" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 22px; margin-bottom: 24px;">
@@ -535,36 +572,48 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
             <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label"><i class="fa-solid fa-file-image text-gold"></i> Choose Photo from Device / Computer</label>
-              <input type="file" id="galleryFileInput" class="form-control" accept="image/*" style="padding: 9px;">
-              <small style="color: var(--text-muted); font-size: 0.74rem;">Select .jpg, .png or .webp image file</small>
+              <label class="form-label"><i class="fa-solid fa-file-image text-gold"></i> Choose Photo(s) from Device (Multiple Allowed) *</label>
+              <input type="file" id="galleryFileInput" class="form-control" accept="image/*" multiple style="padding: 9px;">
+              <small style="color: var(--text-muted); font-size: 0.74rem;">Select one or multiple images (.jpg, .png, .webp). Auto-compressed for ultra fast upload.</small>
             </div>
             <div class="form-group" style="margin-bottom: 0;">
               <label class="form-label"><i class="fa-solid fa-link text-gold"></i> Or Enter Image Web URL</label>
               <input type="url" id="galleryUrlInput" class="form-control" placeholder="https://images.unsplash.com/photo-...">
-              <small style="color: var(--text-muted); font-size: 0.74rem;">Direct web link to image</small>
+              <small style="color: var(--text-muted); font-size: 0.74rem;">Direct web link to image (optional)</small>
             </div>
           </div>
 
-          <!-- Preview box -->
-          <div id="galleryPreviewBox" style="display: none; margin-bottom: 16px; padding: 12px; background: rgba(0,0,0,0.4); border: 1px dashed var(--border-gold); border-radius: var(--radius-sm); align-items: center; gap: 16px;">
-            <img id="galleryPreviewImg" src="" alt="Preview" style="width: 90px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-gold);">
-            <div>
-              <span id="galleryPreviewText" style="color: #fff; font-size: 0.85rem; font-weight: 600; display: block;">Photo Selected</span>
-              <small style="color: var(--primary-gold-light); font-size: 0.76rem;">Ready to publish to website gallery</small>
+          <!-- Enhanced Multi-Preview Box -->
+          <div id="galleryPreviewBox" style="display: none; margin-bottom: 16px; padding: 14px; background: rgba(0,0,0,0.5); border: 1px dashed var(--border-gold); border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span id="galleryPreviewCount" style="color: #fff; font-size: 0.86rem; font-weight: 600;"><i class="fa-solid fa-images text-gold"></i> Selected Photos (0)</span>
+              <button type="button" class="btn btn-outline-gold btn-sm" id="clearGalleryFilesBtn" style="font-size: 0.72rem; padding: 2px 10px;">Clear All</button>
             </div>
+            <div id="galleryMultiPreview" style="display: flex; gap: 12px; flex-wrap: wrap; max-height: 220px; overflow-y: auto;"></div>
+            <div id="galleryUploadProgressBar" style="display: none; margin-top: 12px; background: #222; border-radius: 4px; overflow: hidden; height: 8px;">
+              <div id="galleryUploadProgressFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #d4af37, #f6e05e); transition: width 0.3s;"></div>
+            </div>
+            <small id="galleryUploadProgressStatus" style="display: none; color: #eeddb0; font-size: 0.78rem; margin-top: 6px;"></small>
           </div>
 
-          <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn btn-gold">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <small style="color: var(--text-muted); font-size: 0.78rem;">
+              <i class="fa-solid fa-cloud text-gold"></i> Photos sync to Google Sheets & Drive and display live to all users on <code>gallery.html</code>.
+            </small>
+            <button type="submit" id="gallerySubmitBtn" class="btn btn-gold">
               <i class="fa-solid fa-cloud-arrow-up"></i> Upload & Publish to Gallery
             </button>
           </div>
         </form>
 
-        <h4 style="color: #eeddb0; font-size: 1rem; margin-bottom: 14px;">
-          <i class="fa-solid fa-photo-film text-gold"></i> Currently Uploaded Custom Gallery Photos:
-        </h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h4 style="color: #eeddb0; font-size: 1rem; margin: 0;">
+            <i class="fa-solid fa-photo-film text-gold"></i> Currently Uploaded Custom Gallery Photos:
+          </h4>
+          <button type="button" class="btn btn-outline-gold btn-sm" id="refreshGalleryBtn" onclick="refreshCustomGalleryList()">
+            <i class="fa-solid fa-arrows-rotate"></i> Sync from Google Sheets
+          </button>
+        </div>
         <div id="customGalleryList" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
           <!-- Populated dynamically via admin.js -->
         </div>
@@ -943,6 +992,7 @@
   </div>
 
   <!-- Store & Script -->
+  <script src="assets/js/config.js"></script>
   <script src="assets/js/store.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>
